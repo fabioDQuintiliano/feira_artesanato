@@ -1,0 +1,18 @@
+<?php
+$ITEM = $_GET[':item'];
+$TABELA_PRIMARIA = $_GET[':tapPri'];
+$ITEM_JOIN = $_GET[':itemJoin'];
+$CHAVE_TABELA_ATUAL = $_GET[':chPrim'];
+$CHAVE_TABLEA_JOIN = $_GET[':chExtr'];
+/*
+$AUX = DB::reaad($TABELA_PRIMARIA);
+$AUX->$CHAVE_TABELA_ATUAL = $CHAVE_TABLEA_JOIN;
+$AUX->load();
+*/
+
+$_SESSION['geraJoinTabela'][$ITEM_JOIN]['ITEM_JOIN'] = $ITEM_JOIN;
+$_SESSION['geraJoinTabela'][$ITEM_JOIN]['CHAVE_TABELA_ATUAL_VALUE'] = $CHAVE_TABELA_ATUAL;
+$_SESSION['geraJoinTabela'][$ITEM_JOIN]['CHAVE_TABLEA_JOIN_NAME'] = $CHAVE_TABLEA_JOIN;
+
+echo "<META HTTP-EQUIV=REFRESH CONTENT='0; URL=".ROOT."adm-home?item=".$ITEM_JOIN."'>";
+?>

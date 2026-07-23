@@ -1,0 +1,71 @@
+name: feira
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      APP_ENV: "${APP_ENV:-development}"
+      APP_URL: "${APP_URL:-http://localhost:8080/}"
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: "${DB_DATABASE:-admin_feira}"
+      DB_USERNAME: "${DB_USERNAME:-feira}"
+      DB_PASSWORD: "${DB_PASSWORD:-feira}"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      CRON_TOKEN: "${CRON_TOKEN:-}"
+    volumes:
+      - ./:/var/www/html
+      - composer_vendor:/var/www/html/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --sql-mode=NO_AUTO_VALUE_ON_ZERO
+    ports:
+      - "${DB_PORT_FORWARD:-3307}:3306"
+    environment:
+      MYSQL_DATABASE: "${DB_DATABASE:-admin_feira}"
+      MYSQL_USER: "${DB_USERNAME:-feira}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-feira}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-feira_root}"
+      TZ: America/Sao_Paulo
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./dump/dump.sql:/docker-entrypoint-initdb.d/01-dump.sql:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mysqladmin ping -h localhost -uroot -p"$${MYSQL_ROOT_PASSWORD}" --silent
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_PORT:-8081}:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 64M
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  composer_vendor:
+  mysql_data:

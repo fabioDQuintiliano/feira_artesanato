@@ -1,0 +1,15 @@
+.git
+.gitignore
+.idea
+.vscode
+
+.env
+node_modules
+vendor
+
+_public
+_publish
+dump
+
+*.log
+docker-compose.override.yml

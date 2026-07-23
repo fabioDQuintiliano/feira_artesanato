@@ -1,0 +1,80 @@
+@charset "utf-8";
+/* CSS Document */
+
+@font-face {
+    font-family: 'opificio';
+    src: url('../fonts/opificio_rounded-webfont.eot');
+    src: url('../fonts/opificio_rounded-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/opificio_rounded-webfont.woff') format('woff'),
+         url('../fonts/opificio_rounded-webfont.ttf') format('truetype'),
+         url('../fonts/opificio_rounded-webfont.svg#opificiorounded') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+body{  margin:0px; padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; background:#ECF0F1}
+#system_login_box{width:350px; height:300px; position:absolute; top:50%; left:50%; margin-top:-150px; margin-left:-175px; background:#f1f1f1; border-radius:10px;}
+input, select,textarea{background:#fff; border:solid 1px #dadada; border-radius:0px; padding:8px 5px 8px 5px; color:#666;}
+input[type=submit]{background: url(img/degrade.jpg); cursor:pointer; font-weight:100;}
+label{ font-weight:100; font-size:14px;}
+.row{ width:100%; float:left; clear:both; background:none !important; border:none !important; padding:0px 0px 0px 0px !important;}
+
+.item_modulo_system{ width:128px; height:128px; float:left; margin-left:15px; margin-top:15px;}
+
+.join{ display:none;}
+#mascara_personalizada{ display:none;}
+
+.list_input{ width:100px; height:100px; padding:10px 10px 10px 10px; border:#999 solid 1px; border-radius:0px;  margin:5px 5px 5px 5px; position:relative;background:#fff}
+.list_input_add{ width:100px; height:100px;border:#999 solid 1px; border-radius:5px;  margin:5px 5px 5px 5px; position:relative;background:#fff  url(img/degrade.jpg) repeat-x;float:left; margin:0px 40px 40px 40px;}
+.list_input_titulo{ font-weight:bold; font-size:14px; color:#17A086;}
+.list_input_del{ background:url(img/del_ico.png); width:30px; height:30px; position:absolute; right:0px; bottom:0px; margin-right:5px; margin-bottom:5px; cursor:pointer;}
+.list_input_edt{ background:url(img/ico_edt.png); width:30px; height:30px; position:absolute; right:42px; bottom:0px; margin-right:5px; margin-bottom:5px; cursor:pointer;}
+
+#head_menu_system{ width:100%; height:auto; background:#5D6E7E; float:left; clear:both; border-bottom:solid 2px #666; margin-bottom:10px;}
+#head_menu_system a{color:#fff; text-decoration:none;}
+#head_menu_system_inner{padding:10px 10px 10px 10px; float:left; clear:both; font-size:14px;}
+.itens_menu_system{float:left; margin-left:20px;}
+.legenda{ font-size:10px; color:#333;}
+.optionAdvanced{ display:none;}
+.opc_avancada{ height:48px; width:48px; position:fixed; top:50px; right:10px; z-index:99; cursor:pointer;}
+#ordena{list-style-type: none; float:left; }
+#ordena li{ float:left;}
+
+/**/
+.headPagesSys{ width:100%; float:left; clear:both; padding:10px 0px 10px 0px; margin:10px 0px 10px 0px; display:table;}
+.headPagesSysInner{ border-bottom: dotted 1px #5D6E7E; margin:10px 10px 10px 10px; padding:10px 10px 10px 10px;}
+.headPagesSysInnerContent{ clear:both; width:100%; }
+.bt,input[type=submit]{ font-weight:100; background:#E84C3D; padding:10px 10px 10px 10px; color:#fff; border:none; outline:none; font-size:14px; cursor:pointer; text-decoration:none; margin:5px 5px 5px 5px;}
+
+/**editor grafico*/
+#containerGraph{ padding:10px 10px 10px 10px;}
+#containerGraph div{ overflow:hidden; white-space:nowrap;background:#fff; border:solid 1px #dadada; border-radius:0px; padding:8px 5px 8px 5px; color:#666; float:left; width:160px; margin:5px 5px 0px 0px; }
+.opcsGraph{ float:left; clear:both; font-size:10px;padding:0px 0px 0px 0px; margin:0px 0px 0px 0px;}
+.opcsGraph a{ cursor:pointer;}
+
+.pWidth{ width:40px !important;}
+.mWidth{ width:150px !important;}
+.gWidth{ width:500px !important;}
+.ggWidth{ width:800px !important;}
+.autoWidth{ width:auto !important; border:solid 1px #E77E23 !important; background:#fff0b2 !important;}
+.linhaSeparaSessao{ width:99%;  border:none;border-bottom: solid 3px #16A085; color:#16A085; border-left:solid 3px #16A085; font-weight:bold; margin-top:5px; float:left; clear:both;}
+
+
+#containerGraph .clear_system{ border-bottom:solid #CCC 1px; float:left;width:100%; display:block; height:0px; padding:0px 0px 0px 0px; margin:5px 0px 0px 0px;}
+
+
+/*----*/
+
+.formList{ background:#fff; width:250px; float:left; margin:5px 5px 15px 5px ; position:relative; }
+.formList .titulo{background:#3598DC; color:#fff; float:left; padding:10px 10px 10px 10px; font-size:18px; width:230px;}
+.formList .menu{ position:absolute; top:0px; right:0px; color:#fff; background:#2D3E50; margin:-10px 10px 0px 10px; padding:3px 5px 3px 5px; font-size:12px; }
+.formList .info{ float:left; clear:both; padding:10px 10px 10px 10px; font-size:12px; width:230px; /*min-height:76px;*/}
+.formList .info .row{ float:left; clear:both; width:100%; }
+.formList .info .row .item{ float:left; width:50px; margin-right:10px; text-align:right; font-weight:bold;}
+.formList .info .row .desc{ float:left; width:170px;}
+.formList .opcs{ float:left; clear:both; padding:5px 5px 0px 5px; background:#3598DC; width:240px;}
+.formList .listPg{ background:url(img/pgList.png) no-repeat 5px 7px ; float:left;  clear:both; margin-top:5px; width:180px; color:#000; padding:20px 0px 20px 50px; border-radius:20px; position:relative;}
+.formList .listPg .none{ background:#E84C3D; color:#fff; font-weight:bold; height:20px; width:20px; border-radius:100%; text-align:center; font-size:30px; line-height:16px; position:absolute; top:0px; left:0px; text-indent:-1px; border: solid 2px #fff; cursor:pointer;}

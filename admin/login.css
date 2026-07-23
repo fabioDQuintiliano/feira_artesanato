@@ -1,0 +1,55 @@
+/*login box*/
+
+#system_login_box{width:600px; height:200px; position:absolute; top:50%; left:50%; margin-top:-100px; margin-left:-300px; }
+
+#alinha_box_login{ position:absolute; right:0px;}
+
+#system_login_box input[type=text],#system_login_box input[type=password]{ padding:10px 5px 10px 5px; height:20px; font-size:16px; border:none; width:200px; border-radius:5px; outline: none;}
+
+#system_login_box label{ color:#fff;}
+
+#system_login_box input[type=submit]{ background:#42AD82; padding:5px 15px 5px 15px; border:none; width:100px;}
+
+#system_login_box #logotipo{ width:200px; height:200px; position:absolute; top:0px; border-radius: 100px; overflow: hidden;}
+
+#rowLogin{ width:100%; position:absolute; height:230px; top:50%; margin-top:-115px; background:url(../images/admin/background_preto.png);}
+
+
+
+
+
+
+
+.contentLogin{ position:absolute; height:100%; width:100%; top:0px; left:0px; overflow:hidden; z-index:2;   font-family:'opensans',Arial, Helvetica, sans-serif; }
+
+#contentLoginBlur{ position: absolute; height:100%; width: 100%; z-index:1; overflow:hidden;background:url(../images/admin/bgLogin.jpg); background-size: cover; background-position: center center;}
+
+.imgBgLogin{ min-width:100%; min-height:100%; position:relative;  }
+
+
+
+
+
+
+
+@media screen and (max-width: 700px) { 
+
+	.contentLogin{ overflow-y:auto;}
+
+	#system_login_box{ float:left; clear:both; position:relative; top:0px; margin-top:10%; height:auto;}
+
+	#system_login_box #logotipo{ width:100%; float:left; clear:both; position:relative; position:relative; text-align:center;}
+	#system_login_box #logotipo img{border-radius: 100px;}
+
+	#alinha_box_login{ width:210px; left:50%; margin-left:-105px; float:left; clear:both; position:relative;}
+
+	#rowLogin{ height:auto; position:relative; float:left; clear:both; margin-top:0px; top:0px; min-height:100%;}
+
+	#alinha_box_login input[type=submit]{ float:none;}
+
+	.pbt{ text-align:center;}
+
+}
+
+
+

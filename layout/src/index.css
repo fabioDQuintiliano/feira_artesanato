@@ -1,0 +1,101 @@
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
+    
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
+    
+    --accent: 270 60% 55%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 24 95% 53%;
+    
+    --radius: 0.75rem;
+    
+    /* Event type tag colors */
+    --tag-music: 340 82% 52%;
+    --tag-theater: 270 60% 55%;
+    --tag-cinema: 200 80% 50%;
+    --tag-art: 150 60% 45%;
+    --tag-dance: 30 90% 55%;
+    --tag-literature: 45 85% 55%;
+    --tag-festival: 0 75% 55%;
+    --tag-workshop: 175 70% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .tag-music {
+    @apply bg-[hsl(var(--tag-music))];
+  }
+  .tag-theater {
+    @apply bg-[hsl(var(--tag-theater))];
+  }
+  .tag-cinema {
+    @apply bg-[hsl(var(--tag-cinema))];
+  }
+  .tag-art {
+    @apply bg-[hsl(var(--tag-art))];
+  }
+  .tag-dance {
+    @apply bg-[hsl(var(--tag-dance))];
+  }
+  .tag-literature {
+    @apply bg-[hsl(var(--tag-literature))];
+  }
+  .tag-festival {
+    @apply bg-[hsl(var(--tag-festival))];
+  }
+  .tag-workshop {
+    @apply bg-[hsl(var(--tag-workshop))];
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-primary;
+  }
+  
+  .glass-effect {
+    @apply bg-card/80 backdrop-blur-lg border border-border/50;
+  }
+}

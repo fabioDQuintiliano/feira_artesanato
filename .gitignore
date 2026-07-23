@@ -1,0 +1,19 @@
+# IDEs
+.idea
+.env
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+/images/upload
+/mpdf
+/_public
+/_publish
+/bootstrap
+/tables
+/functions/__list_functions.php
+/classes/Firebase/firebase_credentials.json
+
+# Metadatos de arquivos baixados pelo Windows
+*Zone.Identifier
