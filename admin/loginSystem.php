@@ -1,130 +1,91 @@
 <?php
 
-if(!empty($_POST[':login']) && !empty($_POST[':senha'])):	
+$loginVal = '';
+if (!empty($_POST['login'])) {
+	$loginVal = (string) $_POST['login'];
+} elseif (!empty($_POST[':login'])) {
+	$loginVal = (string) $_POST[':login'];
+}
 
-	$log = loginSystem(addslashes($_POST[':login']), addslashes($_POST[':senha']));
-    
+$senhaVal = '';
+if (!empty($_POST['senha'])) {
+	$senhaVal = (string) $_POST['senha'];
+} elseif (!empty($_POST[':senha'])) {
+	$senhaVal = (string) $_POST[':senha'];
+}
 
-    if(function_exists('exec_after_login')){
-        exec_after_login();
-    }
-	
+if ($loginVal !== '' && $senhaVal !== ''):
 
-	echo "<META HTTP-EQUIV=REFRESH CONTENT='0'>";
+	$log = loginSystem(addslashes($loginVal), addslashes($senhaVal));
 
-	exit;
+	if ($log) {
+		if (function_exists('exec_after_login')) {
+			exec_after_login();
+		}
+		echo "<META HTTP-EQUIV=REFRESH CONTENT='0'>";
+		exit;
+	}
+
+	$_SESSION['resposta_no'] = 'Login ou senha inválidos.';
 
 endif;
-
-?>
-
-
-
-
-
-<?php
 
 $info = new UserInfo;
 $ip = $info->getIp();
 
-
-
 $aux = DB::read('system_block');
-
 $aux->ip = $ip;
+$aux->load('', 'data > NOW()');
 
-$aux->load("","data > NOW()");
+$bloqueado = ($aux->size() > 0 || (!empty($_SESSION[PROJETO_NOME]['temp_block']) && $_SESSION[PROJETO_NOME]['temp_block'] >= date('Y-m-d H:i:s')));
 
-if(($aux->size() > 0 || ($_SESSION[PROJETO_NOME]['temp_block']>=date("Y-m-d H:i:s") && $_SESSION[PROJETO_NOME]['temp_block'] != ''))):
-
-	$_SESSION[PROJETO_NOME]['temp_block'] = $aux->data;
-
-	
-
+if ($bloqueado):
+	$_SESSION[PROJETO_NOME]['temp_block'] = $aux->data ?: $_SESSION[PROJETO_NOME]['temp_block'];
 	?>
-
-	<div class="alertMsgLogin">
-
-		<img src="<?=ROOT?>images/admin/alert_ico.png" />
-
-		<br />
-
-		<br />
-
-		O sistema foi bloqueado por excesso de erros ao tentar realizar o login.<br />
-
-		Por favor, entre em contato com a administração.
-
-	</div><!-- alertMsgLogin -->
-
+	<div class="login-alert login-alert-danger" role="alert">
+		<strong>Acesso bloqueado</strong>
+		<p>O sistema foi bloqueado por excesso de tentativas. Entre em contato com a administração.</p>
+	</div>
 	<?php
-
 else:
+	$erroLogin = '';
+	if (!empty($_SESSION['resposta_no'])) {
+		$erroLogin = (string) $_SESSION['resposta_no'];
+		unset($_SESSION['resposta_no']);
+	}
+	$okMsg = '';
+	if (!empty($_SESSION['resposta_ok'])) {
+		$okMsg = (string) $_SESSION['resposta_ok'];
+		unset($_SESSION['resposta_ok']);
+	}
+	?>
+	<header class="login-card-head">
+		<img src="<?php echo ROOT; ?>images/logoAdmin.png" alt="<?= htmlspecialchars(PROJETO_NOME, ENT_QUOTES, 'UTF-8') ?>" class="login-card-logo" />
+		<h2>Entrar</h2>
+		<p>Use suas credenciais de administrador.</p>
+	</header>
 
-?>
+	<?php if ($okMsg !== ''): ?>
+		<div class="login-alert login-alert-ok" role="status"><?php echo htmlspecialchars($okMsg, ENT_QUOTES, 'UTF-8'); ?></div>
+	<?php endif; ?>
 
-	<script>
+	<?php if ($erroLogin !== ''): ?>
+		<div class="login-alert login-alert-danger" role="alert"><?php echo htmlspecialchars($erroLogin, ENT_QUOTES, 'UTF-8'); ?></div>
+	<?php endif; ?>
 
-    $(function(){
+	<form method="post" class="login-form" autocomplete="on">
+		<label class="login-field">
+			<span>Login</span>
+			<input type="text" name="login" id="login" value="<?php echo htmlspecialchars($loginVal, ENT_QUOTES, 'UTF-8'); ?>" required autofocus autocomplete="username" />
+		</label>
 
-        $("#login").focus();
+		<label class="login-field">
+			<span>Senha</span>
+			<input type="password" name="senha" id="senha" required autocomplete="current-password" />
+		</label>
 
-    })
-
-    </script>
-
-    
-
-    <div id="rowLogin">
-
-    <div id="system_login_box">
-
-        <div id="logotipo"><img src="<?=ROOT?>images/logoLogin.png" /></div><!-- logotipo -->
-
-    
-
-        <div id="alinha_box_login">
-
-      <form method="post">
-
-            <p>
-
-                <label for="login">Login</label>
-
-                <br />
-
-                <input type="text" name="login" id="login" />
-
-            </p>
-
-            <p>
-
-                <label for="login">Senha</label>
-
-                <br />
-
-                <input type="password" name="senha" />
-
-            </p>
-
-            <p class="pbt">
-
-                <input type="submit" value="Logar" />
-
-            </p>
-
-        </form>
-
-        </div>
-
-        
-
-    </div>
-
-    </div><!-- rowLogin -->
-
-<?php
-
+		<button type="submit" class="login-submit">Acessar painel</button>
+	</form>
+	<?php
 endif;
-
 ?>

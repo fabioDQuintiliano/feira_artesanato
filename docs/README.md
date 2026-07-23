@@ -1,4 +1,4 @@
-# Documentação técnica do Eventos
+# Documentação técnica do Feira
 
 Este diretório resume o funcionamento do sistema para agentes de IA e pessoas que precisem localizar, compreender ou alterar um módulo com segurança.
 
@@ -7,6 +7,9 @@ Este diretório resume o funcionamento do sistema para agentes de IA e pessoas q
 - Não pesquisar nem alterar `_public/` e `_publish/`.
 - Não editar `tables/`: ela contém artefatos gerados automaticamente a partir de metadados do banco.
 - Tratar `admin/exe_system/`, `containers/exe_system/` e `functions/__list_functions.php` como arquivos derivados antes de modificá-los.
+- **Classes novas do sistema principal devem ser criadas em `classes/Sistema/`** (namespace `Sistema\`). Não colocar regra de negócio em `functions/` soltas nem em pastas ad hoc sob `classes/`.
+- **Funções avulsas (helpers globais) devem ir em `functions/auto_*.php`.** Todo arquivo nessa pasta cujo nome começa com `auto_` é incluído automaticamente via `functions/__list_functions.php` (gerado por `system/gera_arquivos_de_listagem.php`).
+- **Campos especiais do painel admin** (upload, editor, crop, permissões, etc.) vão em `componente/{slug}.php` com classe `Componente__{slug}`, mapeados via `system_inputs.mapear_componente`. Ver [admin-form-components.md](admin-form-components.md). Não confundir com `pages/cp_*` (Vue do frontend).
 - Não copiar credenciais, tokens ou chaves encontradas no código para documentação, logs, testes ou respostas.
 - Evitar executar a aplicação contra outro banco sem avaliar a geração automática de arquivos.
 - Confirmar o estado do repositório antes de alterar arquivos: parte do código atual pode não estar versionada.
@@ -16,8 +19,11 @@ Este diretório resume o funcionamento do sistema para agentes de IA e pessoas q
 - [Visão da arquitetura](architecture.md)
 - [Ciclo das requisições](request-lifecycle.md)
 - [Convenções do frontend](frontend-conventions.md)
+- [Páginas, Vue e objetos](pages-vue-objetos.md)
 - [Persistência e modelo de dados](data-access.md)
 - [Administração e arquivos gerados](generated-admin.md)
+- [Pasta `system/` e geração do painel](system-admin.md)
+- [Componentes de formulário do admin](admin-form-components.md)
 - [Autenticação e sessões](authentication-and-sessions.md)
 - [Módulos funcionais](modules.md)
 - [Integrações e pontos de entrada](integrations-and-entrypoints.md)
@@ -33,7 +39,7 @@ O projeto é um monólito PHP customizado, sem framework MVC principal. O núcle
 - Apache e `mod_rewrite`;
 - roteamento próprio por prefixos;
 - páginas PHP renderizadas no servidor;
-- Vue 2 e jQuery carregados sem pipeline de build;
+- Vue 3 (CDN) com ponte de compatibilidade e jQuery, sem pipeline de build na raiz;
 - administração CRUD orientada por metadados do MySQL;
 - API REST construída sobre Slim 2;
 - múltiplas camadas de acesso ao banco;
@@ -50,7 +56,8 @@ O projeto é um monólito PHP customizado, sem framework MVC principal. O núcle
 | Ações HTTP | `action/` |
 | Funções compartilhadas | `functions/` |
 | API | `rest.php`, `rest/`, `classes/Backend/` |
-| Administração | `adm.php`, `admsite.php`, `admin/`, `system/` |
+| Administração / geração de módulos | `system/`, `adm.php`, `admin/`, `tables/` (consulta) |
+| Widgets de campo do admin | `componente/` |
 | Código gerado | `tables/`, `admin/exe_system/`, `containers/exe_system/` |
 
 ## Limites desta documentação

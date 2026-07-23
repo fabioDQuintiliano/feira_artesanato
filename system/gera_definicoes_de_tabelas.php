@@ -54,6 +54,8 @@ if($TB->size()>0)do{
 
 */
 
+require_once __DIR__ . '/codegen_helpers.php';
+
 $q = new Model;
 $DAT_FORMS = $q->read("system_form");
 $lTabelas = 0;
@@ -312,23 +314,7 @@ if(count($DAT_FORMS)>0):
 		$CONTENT_DB .= ' ?>';
 	
 		$caminho_definicao = __DIR__ . '/../tables/def_' . $DAT_FORM['arquivo_def'] . '.php';
-		$fp = fopen($caminho_definicao, 'c');
-
-		if (!$fp) {
-			throw new RuntimeException("Não foi possível abrir: ".$caminho_definicao);
-		}
-
-		if (!flock($fp, LOCK_EX)) {
-			fclose($fp);
-			throw new RuntimeException("Não foi possível bloquear: ".$caminho_definicao);
-		}
-
-		ftruncate($fp, 0);
-		rewind($fp);
-		$escreve = fwrite($fp, $CONTENT_DB);
-		fflush($fp);
-		flock($fp, LOCK_UN);
-		fclose($fp);
+		system_atomic_write($caminho_definicao, $CONTENT_DB);
 		
 		$lTabelas++;
 	endforeach;
@@ -384,27 +370,11 @@ if($menu->size()){
 
 
 
-//DELETA O ARQUIVO SE ELE JA EXISTIR
-@unlink("tables/_admin_menu.php");
-//ABRE O ARQUIVO DE DEFINIÇÃO DA TABELA E ESCREVE SEU DADOS
-$fp = fopen("tables/_admin_menu.php", "a+");
-$escreve = fwrite($fp, '<?php '.($CONTENT_INFO_MENU).' ?>');
+require_once __DIR__ . '/codegen_helpers.php';
 
-fclose($fp);
-		
-//DELETA O ARQUIVO SE ELE JA EXISTIR
-@unlink("tables/_admin_permissoes.php");
-//ABRE O ARQUIVO DE DEFINIÇÃO DA TABELA E ESCREVE SEU DADOS
-$fp = fopen("tables/_admin_permissoes.php", "a+");
-$escreve = fwrite($fp, '<?php '.($CONTENT_PERMISSOES).' ?>');
-
-fclose($fp);
-		
-//DELETA O ARQUIVO SE ELE JA EXISTIR
-@unlink("tables/_admin_def_tables.php");
-//ABRE O ARQUIVO DE DEFINIÇÃO DA TABELA E ESCREVE SEU DADOS
-$fp = fopen("tables/_admin_def_tables.php", "a+");
-$escreve = fwrite($fp, '<?php '.($CONTENT_DEF_ARRAY).' ?>');
+system_atomic_write(__DIR__ . '/../tables/_admin_menu.php', '<?php '.($CONTENT_INFO_MENU).' ?>');
+system_atomic_write(__DIR__ . '/../tables/_admin_permissoes.php', '<?php '.($CONTENT_PERMISSOES).' ?>');
+system_atomic_write(__DIR__ . '/../tables/_admin_def_tables.php', '<?php '.($CONTENT_DEF_ARRAY).' ?>');
 
 
 

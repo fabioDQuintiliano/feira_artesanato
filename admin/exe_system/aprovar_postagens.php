@@ -1,5 +1,9 @@
 <!--[CONTAINER-padrao-simples]-->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
+
+
+
+<script src="<?php echo ROOT; ?>script/vue3-bridge.js"></script>
 
 
 

@@ -9879,6 +9879,7 @@ CREATE TABLE `estabelecimentos` (
   `endereco` varchar(500) DEFAULT NULL,
   `cidade` int NOT NULL,
   `estado` int NOT NULL,
+  `tipo` int NOT NULL DEFAULT 4 COMMENT '0=Bares e Restaurantes,1=Cinema,2=Teatro,3=Parques,4=Outros',
   `created_on` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` int NOT NULL,
   `edited_on` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -9959,7 +9960,9 @@ CREATE TABLE `eventos` (
   `link` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `valor` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `faixa_etaria` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `local` text COLLATE utf8mb4_unicode_ci
+  `local` text COLLATE utf8mb4_unicode_ci,
+  `estabelecimento` int DEFAULT NULL COMMENT 'FK estabelecimentos.id',
+  KEY `idx_eventos_estabelecimento` (`estabelecimento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

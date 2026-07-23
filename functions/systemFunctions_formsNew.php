@@ -498,75 +498,12 @@ function loadFormNew($configTableList,$edit=null,$joinnn_item=null,$bt=''){
 
             if(!empty($li['mapear_componente'])):
 
-            
-
-                if(is_file('componente/'.$li['mapear_componente'].'.php')):
-
-					if($li['parametros_componente']!=''){
-
-						$paramC = explode("\n",$li['parametros_componente']);
-
-						if(is_array($paramC)){
-
-							$PARAM = array();
-
-							foreach($paramC as $p){
-
-								
-
-								$itP = explode('=',$p);
-
-								$PARAM[$itP[0]]=trim($itP[1]);
-
-								
-
-							}
-
-							
-
-						}
-
-					}
-
-					
-
-					//inclui o componente e chama a função de listagem
-
-					$CLASS_EXIBE_COMPONENTE = 'Componente__'.$li['mapear_componente'];
-
-					if(!class_exists($CLASS_EXIBE_COMPONENTE)):
-
-						echo '<input type="hidden" name="componente__mapear[]" value="'.$li['mapear_componente'].'__'.$li['campo_tabela'].'" />';
-
-						include "componente/".$li['mapear_componente'].".php";
-
-					endif;
-
-					
-
-					//passa o nome do item como parametro, junto com os demais parametros
-
-					$PARAM['nome_campo'] = $li['nome'];
-
-					$PARAM['campo_tabela'] = $li['campo_tabela'];
-
-					
-
-					$EXIBE_COMPONENTE = new $CLASS_EXIBE_COMPONENTE;
-
-					//passa como parametro o nome da tabela, o id do registro e o valor do campo.
-
-					echo $EXIBE_COMPONENTE->exibe($DefinicaoTabela['tabela'],$list_edt[$li['campo_tabela']],$PARAM);
-
-					
-
-                else:
-
-                    echo 'Erro ao mapear componente <strong>'.$li['mapear_componente'].'.php</strong>';
-
-                endif;
-
-            
+					echo \Sistema\Admin\ComponenteLoader::render(
+						$li,
+						'exibe',
+						$DefinicaoTabela['tabela'],
+						isset($list_edt[$li['campo_tabela']]) ? $list_edt[$li['campo_tabela']] : null
+					);
 
             else:
 
@@ -1071,7 +1008,9 @@ function loadFormNew($configTableList,$edit=null,$joinnn_item=null,$bt=''){
 
         <div class="system_item_form">
 
-            <input type="submit" id="btSubmitForm" value="<?php echo ($edit!=''?'Alterar':($bt!=''?$bt:'Salvar'))?>" />
+            <button type="submit" id="btSubmitForm" class="btn bg-gradient-info">
+            	<?php echo ($edit!=''?'Alterar':($bt!=''?$bt:'Salvar'))?>
+            </button>
 
         </div>    
 
@@ -1285,11 +1224,7 @@ function listFormNew($FormularioListado,$ordem = null,$startPaginacao = 0,$QUERY
 
 					  })
 
-					  console.log(enviaOrdem);
-
 					   $.post('<?php echo ROOT?>fn-alteraOrdemLinhaList',{p1:enviaOrdem,p2:'<?php echo $tabelaListada?>'},function(o){
-
-							  console.log(o);
 
 					    });
 
@@ -1457,29 +1392,15 @@ function listFormNew($FormularioListado,$ordem = null,$startPaginacao = 0,$QUERY
 
 							//Substitui o campo por uma pagina. Caso a página exista
 
-							elseif(!empty($li['mapear_componente']) && is_file('componente/'.$li['mapear_componente'].'.php')):
+							elseif(!empty($li['mapear_componente'])):
 
-								
-
-
-
-								//inclui o componeten e chama a função de listagem
-
-								$CLASS_EXIBE_COMPONENTE = 'Componente__'.$li['mapear_componente'];
-
-								if(!class_exists($CLASS_EXIBE_COMPONENTE)){
-
-									include "componente/".$li['mapear_componente'].".php";
-
-								}
-
-								$EXIBE_COMPONENTE = new $CLASS_EXIBE_COMPONENTE;
-
-								//passa como parametro o nome da tabela, o id do registro e o valor do campo.
-
-								echo $EXIBE_COMPONENTE->listagem($tabelaListada,$ld['id'],$VALUE_LISTAGEM);
-
-								
+								echo \Sistema\Admin\ComponenteLoader::render(
+									$li,
+									'listagem',
+									$tabelaListada,
+									$VALUE_LISTAGEM,
+									isset($ld['id']) ? $ld['id'] : null
+								);
 
 							elseif($li['type']=='select' && !empty($li['valor'])):
 
@@ -2025,33 +1946,15 @@ function viewForm($configTableList,$idReg){
 
 				
 
-			elseif(!empty($li['mapear_componente']) && is_file('componente/'.$li['mapear_componente'].'.php')):
+			elseif(!empty($li['mapear_componente'])):
 
-				
-
-				
-
-				
-
-			
-
-			
-
-				$CLASS_EXIBE_COMPONENTE = Componente__.$li['mapear_componente'];
-
-				if(!class_exists($CLASS_EXIBE_COMPONENTE)){
-
-					include "componente/".$li['mapear_componente'].".php";
-
-				}
-
-				
-
-				$EXIBE_COMPONENTE = new $CLASS_EXIBE_COMPONENTE;
-
-				//passa como parametro o nome da tabela, o id do registro e o valor do campo.
-
-				echo $EXIBE_COMPONENTE->view($defTabela['tabela'],$dadosReg->{$li['campo_tabela']});
+				echo \Sistema\Admin\ComponenteLoader::render(
+					$li,
+					'view',
+					$defTabela['tabela'],
+					isset($dadosReg->{$li['campo_tabela']}) ? $dadosReg->{$li['campo_tabela']} : null,
+					isset($dadosReg->id) ? $dadosReg->id : null
+				);
 
 							
 

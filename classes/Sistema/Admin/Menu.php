@@ -12,9 +12,9 @@ class Menu {
 		'textos' => 'fas fa-file-alt',
 		'postagens' => 'fas fa-newspaper',
 		'banner' => 'fas fa-image',
-		'informacoes' => 'fas fa-cog',
-		'indicadores' => 'fas  fa-sort-numeric-up-alt',
-		'clientes' => 'fas  fa-user-friends',
+		'informacoes' => 'fas fa-info-circle',
+		'indicadores' => 'fas fa-sort-numeric-up-alt',
+		'clientes' => 'fas fa-user-friends',
 		'depoimentos' => 'fas fa-quote-left',
 		'projetos' => 'fas fa-th-large',
 		'categorias' => 'fas fa-list',
@@ -22,10 +22,17 @@ class Menu {
 		'paginas' => 'fas fa-file-alt',
 		'tarefas' => 'fas fa-tasks',
 		'cronogramas' => 'fas fa-project-diagram',
-
-
-
-
+		'estabelecimentos' => 'fas fa-store',
+		'links' => 'fas fa-link',
+		'usuarios' => 'fas fa-user-shield',
+		'permissoes' => 'fas fa-key',
+		'menus' => 'fas fa-bars',
+		'fotos' => 'fas fa-images',
+		'agenda' => 'fas fa-calendar-alt',
+		'eventos' => 'fas fa-calendar-check',
+		'tags' => 'fas fa-tags',
+		'cidades' => 'fas fa-city',
+		'estados' => 'fas fa-map',
 	];
 	public $iconsSubmenu = [];
 	
@@ -38,12 +45,9 @@ class Menu {
 
 		$objMenu = array();
 		foreach($mainManu as $k=>$itemMenu){
-			//var_dump($itemMenu);
-
-
 			$itens = array();
 
-			if(count($itemMenu['itens'])>0)foreach($itemMenu['itens'] as $j=>$subMenu){
+			if(!empty($itemMenu['itens']) && count($itemMenu['itens'])>0)foreach($itemMenu['itens'] as $j=>$subMenu){
 
 				$MAP['infoPages'][$subMenu['link']]=$subMenu;
 
@@ -77,10 +81,8 @@ class Menu {
 
 
 
-
 		}
 
-		//var_dump($objMenu);
 		return $objMenu;
 
 
@@ -95,28 +97,24 @@ class Menu {
 	}
 
 	function getIcon($nome){
-		//$this->icons = array();
-		//$icon['cadastros'] = '';
-
-	
-		if($this->icons[$nome] && $this->icons[$nome] != ''){
-			return $this->icons[$nome];
+		$key = strtolower((string) $nome);
+		if(!empty($this->icons[$key])){
+			return $this->icons[$key];
 		}
 		return 'fas fa-dice-d6';
 	}
 	function getIconSub($nome){
-		//$this->icons = array();
-		//$icon['cadastros'] = '';
-
-
-		if($this->icons[$nome] && $this->icons[$nome] != ''){
-			return $this->icons[$nome];
+		$key = strtolower((string) $nome);
+		if(!empty($this->iconsSubmenu[$key])){
+			return $this->iconsSubmenu[$key];
 		}
-		return 'fas fa-dice-d6';
+		if(!empty($this->icons[$key])){
+			return $this->icons[$key];
+		}
+		return 'fas fa-circle';
 	}
 	
 
-	
- 
+	 
 
 }

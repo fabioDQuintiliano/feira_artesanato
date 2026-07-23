@@ -5,8 +5,9 @@
 .aux_itens_ico img{ border:none; height:48px;}
 </style>
 <script>
+if (typeof window.jQuery !== 'undefined') {
 $(function(){
-	$("#open_help").click(function(){	
+	$("#open_help").click(function(){
 		
 		if($("#aux_sidebar").css('height').replace('px','') > 0){
 			$("#aux_sidebar").animate({height:'0'},300);
@@ -45,6 +46,7 @@ $(function(){
 }
 	
 });
+}
 </script>
 
 <div id="aux_sidebar">
@@ -83,6 +85,12 @@ $(function(){
     </div>
 	<?php endif;?>
     
+    
+    <div class="aux_itens_ico">
+    	<a target="_blank" href="<?php echo ROOT?>system-rebuild" title="Regenerar artefatos do painel">
+    	<img src="<?php echo ROOT?>system/img/atualizar_ico.png" />
+        </a>
+    </div>
     
     <div class="aux_itens_ico" style="float:right;">
     	<a target="_blank" href="<?php echo ROOT?>publish.php" title="Atualizar">

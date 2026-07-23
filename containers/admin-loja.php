@@ -63,7 +63,8 @@ if(!logado_no_perfil(2)){
     <script src="ROOT/script/script_adminLojas.js"></script>
 
     <script src="ROOT/script/bootbox.all.js"></script>
-    <script src="ROOT/script/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
+    <script src="<?php echo ROOT; ?>script/vue3-bridge.js"></script>
     <script src="ROOT/script/v-money.js"></script>
 
 

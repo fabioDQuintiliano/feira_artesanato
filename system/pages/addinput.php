@@ -92,7 +92,9 @@ if(!empty($_POST)):
 		'edicao_restrita' => $_POST['edicao_restrita'],
 		'validacao' => $_POST['validacao'],
 		'aba' => $_POST['aba'],
-		'mapear_componente' => $_POST['componente'],
+		'mapear_componente' => (isset($_POST['componente']) && preg_match('/^[a-zA-Z0-9_]+$/', (string) $_POST['componente']))
+			? $_POST['componente']
+			: '',
 		'parametros_componente' => $_POST['parametros_componente'],
 		'funcao_exibicao' => $_POST['funcao_exibicao'],
 		/*'linha_separadora' => $_POST['linha_separadora'],*/
@@ -291,34 +293,37 @@ if($l[0]['caracteristica'] == 2):
     
     
 	<tr  class="optionAdvanced">
-    	<td width="150"><label>Mapear Página</label></td>
+    	<td width="150"><label>Componente de campo</label></td>
         <td>
                     
             <select  name="componente">   
-            <option></option>         
+            <option value=""></option>         
             <?php
             $diretorio = dir("componente/");
             while($arquivo = $diretorio->read()){
-              if(is_file("componente/".$arquivo)):
+              if(is_file("componente/".$arquivo) && substr($arquivo, -4) === '.php'):
 			  	$arquivo = str_replace('.php','',$arquivo);
+			  	if (!preg_match('/^[a-zA-Z0-9_]+$/', $arquivo)) {
+			  		continue;
+			  	}
                 echo '<option '.($l[0]['mapear_componente']==$arquivo?'selected="selected"':'').' value="'.$arquivo.'">'.$arquivo.'</option>';
               endif;
             }
             ?>            
             </select>
             
-        	<br /><span style=" font-size:10px;">Carrega uma página no lugar do input.<br />A página deve estar dentro a pasta "componente". </span>
+        	<br /><span style=" font-size:10px;">Carrega um widget de <code>componente/{slug}.php</code> (classe <code>Componente__{slug}</code>) no lugar do input padrão.</span>
         </td>
     </tr>
     
 
 	<tr  class="optionAdvanced">
-    	<td width="150"><label>Mapear Página(parametros)</label></td>
+    	<td width="150"><label>Parâmetros do componente</label></td>
         <td>
                     
             <textarea style=" width:100px; height:100px;" name="parametros_componente"><?php echo $l[0]['parametros_componente']?></textarea>
             
-        	<br /><span style=" font-size:10px;">Paramentos que serão passados para o componente. Um parametros por linha. Ex.: id=1 </span>
+        	<br /><span style=" font-size:10px;">Um por linha no formato <code>chave=valor</code> (ex.: <code>w=150</code>). Ver docs/admin-form-components.md</span>
         </td>
     </tr>
     

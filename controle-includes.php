@@ -32,9 +32,14 @@ include 'front_includes.php';
 
 if(is_dir('system')):
 
-	include 'system/gera_definicoes_de_tabelas.php';
+	require_once 'system/codegen_helpers.php';
 
-	include 'system/gera_arquivos_de_listagem.php';
+	// Em production, codegen fica desligado (SYSTEM_CODEGEN=0). Use /system-rebuild.
+	if(defined('SYSTEM_CODEGEN') && SYSTEM_CODEGEN):
+
+		system_run_codegen();
+
+	endif;
 
 	define('IS_OCA',1);
 
@@ -207,19 +212,22 @@ elseif(in_array($PREFIX_PAGE, $acoes_permitidas)):
 
 		*/
 
-		if(is_dir('system')):
-
-		
+		if(is_dir('system') && defined('SYSTEM_AUX_BAR') && SYSTEM_AUX_BAR):
 
 			include('system/page_auxiliar_sistema.php');
-
-		
 
 		endif;
 
 
 
-			if(is_file('system/pages/'.$pagina_solicitada.'.php')):
+			$systemIdeAllowed = (defined('SYSTEM_IDE_ENABLED') && SYSTEM_IDE_ENABLED)
+				|| $pagina_solicitada === 'rebuild';
+
+			if(!$systemIdeAllowed):
+
+				echo '<div style="padding:2rem;font-family:sans-serif">IDE do sistema desabilitada neste ambiente (SYSTEM_IDE_ENABLED=0). Use <a href="'.ROOT.'system-rebuild">system-rebuild</a> para regenerar artefatos.</div>';
+
+			elseif(is_file('system/pages/'.$pagina_solicitada.'.php')):
 
 				include 'system/pages/'.$pagina_solicitada.'.php';
 
@@ -237,9 +245,9 @@ elseif(in_array($PREFIX_PAGE, $acoes_permitidas)):
 
 			include 'admin/loginSystem.php';
 
-		endif;
+			include 'admin/footer_login.php';
 
-		include 'admin/footer_login.php';
+		endif;
 
 	/*	
 
@@ -334,13 +342,16 @@ elseif(in_array($PREFIX_PAGE, $acoes_permitidas)):
 
 		*/
 
-		if(is_dir('system')):
-
-		
+		// Barra auxiliar só com sessão ativa (login não carrega jQuery)
+		if(
+			function_exists('checa_acesso_system')
+			&& checa_acesso_system()
+			&& is_dir('system')
+			&& defined('SYSTEM_AUX_BAR')
+			&& SYSTEM_AUX_BAR
+		):
 
 			include('system/page_auxiliar_sistema.php');
-
-			
 
 		endif;
 

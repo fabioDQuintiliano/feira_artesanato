@@ -23,7 +23,8 @@
     <link href="ROOT/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="ROOT/assets/css/style.css?v=1" rel="stylesheet">
-    <script src="ROOT/script/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
+    <script src="<?php echo ROOT; ?>script/vue3-bridge.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
 

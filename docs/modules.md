@@ -160,7 +160,8 @@ Rotas:
 - `/system-addform`;
 - `/system-formInput/{id}`;
 - `/system-addinput`;
-- `/system-delform`.
+- `/system-delform`;
+- `/system-rebuild` (regenera artefatos; disponível mesmo com IDE desligada).
 
 Arquivos:
 
@@ -170,7 +171,7 @@ Arquivos:
 - `system/gera_definicoes_de_tabelas.php`;
 - `system/gera_arquivos_de_listagem.php`.
 
-O construtor altera metadados e gera o código consumido pelo CRUD. Exige acesso administrativo. Consulte `generated-admin.md` antes de qualquer mudança.
+O construtor altera metadados e gera o código consumido pelo CRUD. Exige acesso administrativo. Consulte [system-admin.md](system-admin.md) e [generated-admin.md](generated-admin.md) antes de qualquer mudança.
 
 ## Projetos, tarefas e cronogramas
 

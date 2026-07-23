@@ -6,11 +6,11 @@ O frontend é servido diretamente pelo PHP. Não há `package.json` nem pipeline
 
 Tecnologias encontradas:
 
-- Vue 2.6.14;
+- Vue 3.5 (CDN global) com ponte de compatibilidade `script/vue3-bridge.js` para `new Vue({ el })`, `Vue.component` e `Vue.use`;
 - jQuery e jQuery Migrate;
 - Tailwind CSS via CDN no frontend atual;
 - Bootstrap e Soft UI Dashboard no administrativo;
-- Lucide, Chart.js, SortableJS, Vue.Draggable, SweetAlert2, v-mask, Bootbox, Froala e jQuery UI.
+- Lucide, Chart.js, SortableJS, Vue.Draggable 4, SweetAlert2, Maska, Bootbox, Froala e jQuery UI.
 
 ## Estrutura de uma página
 
@@ -33,7 +33,7 @@ Também existem páginas em arquivo único, como `pages/termos.php`.
 
 `containers/` guarda fontes de layout. `containers/exe_system/` contém cabeçalhos e rodapés gerados usados por `page.php`.
 
-O container atual `containers/layout_react.php`, apesar do nome, usa Vue 2, Tailwind, jQuery e Lucide; não usa React.
+O container atual `containers/layout_react.php`, apesar do nome, usa Vue 3, Tailwind, jQuery e Lucide; não usa React.
 
 Antes de alterar um arquivo em `containers/exe_system/`, localize sua fonte ou gerador. Alterações diretas podem ser sobrescritas.
 
@@ -42,6 +42,14 @@ Antes de alterar um arquivo em `containers/exe_system/`, localize sua fonte ou g
 Fragmentos reutilizáveis aparecem em `pages/obj_*` e podem ser carregados pela infraestrutura de objetos, incluindo rotas com prefixo `obj-` e helpers como `loadObj()`.
 
 Objetos seguem a mesma composição opcional de PHP, CSS e Vue.
+
+## Componentes Vue reutilizáveis
+
+**Regra do projeto:** qualquer trecho de UI/comportamento que se repita (ou possa se repetir) no funcionamento principal do sistema deve ir para um componente Vue em `pages/cp_*.php`, carregado com `loadObj('cp_...')` e usado como tag dentro da app da página.
+
+Não duplicar cards, listas, filtros ou blocos equivalentes entre `home_v3`, `eventos` e demais páginas ativas. Detalhes e exemplos em [Páginas, Vue e objetos](pages-vue-objetos.md).
+
+**Não confundir** com widgets de campo do painel admin em `componente/` (`mapear_componente`). Esses são PHP de CRUD, documentados em [Componentes de formulário do admin](admin-form-components.md).
 
 ## Comunicação com o backend
 
@@ -87,4 +95,5 @@ Uploads são gravados dentro da árvore pública, principalmente em `images/uplo
 4. Confirmar se o arquivo de destino é fonte ou gerado.
 5. Verificar HTML inserido por `v-html`.
 6. Testar com bibliotecas carregadas pelo container real.
-7. Evitar sintaxe que dependa de bundler, módulos ou Vue 3.
+7. Testar com bibliotecas carregadas pelo container real.
+8. Preferir Options API compatível com a ponte Vue 3; evitar APIs removidas do Vue 2 (`filters`, `$on`/`$off` no root, `Vue.extend`).

@@ -1,5 +1,7 @@
 # Administração e arquivos gerados
 
+Ver também [system-admin.md](system-admin.md) e [admin-form-components.md](admin-form-components.md) (widgets de campo em `componente/`).
+
 ## Modelo administrativo
 
 A administração é um CRUD genérico orientado por metadados do banco. Em vez de um controller específico para cada entidade, tabelas internas descrevem:
@@ -31,7 +33,13 @@ Eles produzem ou atualizam:
 - `containers/exe_system/`;
 - `functions/__list_functions.php`.
 
-`controle-includes.php` pode executar geradores durante requisições normais quando a pasta `system/` está disponível. Isso significa que iniciar o sistema com banco ou metadados incorretos pode sobrescrever os artefatos derivados.
+### Funções `auto_*`
+
+Arquivos em `functions/` cujo nome começa com `auto_` (ex.: `auto_email_smtp.php`) são descobertos por `system/gera_arquivos_de_listagem.php` e listados em `functions/__list_functions.php`, que o bootstrap inclui. Assim, **funções avulsas novas devem ser criadas como `functions/auto_<assunto>.php`** para entrarem no carregamento automático. Não edite `__list_functions.php` à mão — ele é regenerado.
+
+`controle-includes.php` executa geradores apenas quando `SYSTEM_CODEGEN=1` (padrão em `development`). Em production use `/system-rebuild` (autenticado) ou force `SYSTEM_CODEGEN=1`. Ver [system-admin.md](system-admin.md).
+
+Escrita dos artefatos usa `system_atomic_write()` (arquivo temporário + rename).
 
 ## Regra de edição
 

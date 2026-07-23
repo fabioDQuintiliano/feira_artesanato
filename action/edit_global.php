@@ -433,6 +433,18 @@ if(!empty($_POST)):
 
 		
 
+		// Componentes de campo (afterUpdate/update) antes do posupdate do form
+		if(!empty($_POST['componente__mapear']) && is_array($_POST['componente__mapear'])){
+
+			\Sistema\Admin\ComponenteLoader::runAfterSave(
+				$_POST['componente__mapear'],
+				$_POST['formIdEdit'],
+				$form['tabela'],
+				'update'
+			);
+
+		}
+
 		//chama a fumcao de pos update.
 
 		if(!empty($form['posupdate']) && function_exists($form['posupdate'])):
@@ -444,59 +456,6 @@ if(!empty($_POST)):
 	
 
 		endif;
-
-	
-
-		if($_POST['componente__mapear'] && count($_POST['componente__mapear'])>0){
-
-			$COMPONENTES_POSSALVA = $_POST['componente__mapear'];
-
-			for($ic = 0;$ic<=count($COMPONENTES_POSSALVA);$ic++){
-
-				
-
-				if($COMPONENTES_POSSALVA[$ic] != ''){
-
-					
-
-					$DADOS_COMP = explode('__',$COMPONENTES_POSSALVA[$ic]);
-
-					
-
-					$CLASS_EXIBE_COMPONENTE = 'Componente__'.$DADOS_COMP[0];
-
-					if(!class_exists($CLASS_EXIBE_COMPONENTE)){
-
-						include "componente/".$DADOS_COMP[0].".php";
-
-					}
-
-					$EXIBE_COMPONENTE = new $CLASS_EXIBE_COMPONENTE;
-
-					//passa como parametro o nome da tabela, o id do registro e o valor do campo.
-
-					if(method_exists($EXIBE_COMPONENTE,'update')){
-
-
-						//var_dump($EXIBE_COMPONENTE);
-						$EXIBE_COMPONENTE->update($_POST['formIdEdit'],$form['tabela'],$DADOS_COMP[1]);
-					//	exit;
-
-					}
-
-						
-
-				}
-
-					
-
-			}
-
-			
-
-			
-
-		}
 
 		
 

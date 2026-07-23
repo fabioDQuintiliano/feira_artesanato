@@ -30,7 +30,9 @@
 
 
 <script src="ROOT/script/bootbox.all.js"></script>
-<script src="ROOT/script/vue.js"></script>
+<script src="ROOT/script/bootbox.locales.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
+<script src="<?php echo ROOT; ?>script/vue3-bridge.js"></script>
 <script src="ROOT/script/v-money.js"></script>
 <script src="ROOT/js/toast/jquery.toast.js"></script>
 
@@ -43,6 +45,8 @@
 <link href="ROOT/admin/template/soft-ui-dashboard-main/assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet"
 	type="text/css" />
 <link href="ROOT/admin/css-admin.css" rel="stylesheet" type="text/css" />
+<link href="ROOT/admin/css-admin-soft.css" rel="stylesheet" type="text/css" />
+<script src="ROOT/admin/js/admin-ui.js"></script>
 
 <link href="ROOT/css/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 
@@ -52,13 +56,14 @@
 
 
 
-<script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
-<!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<!-- Vue.Draggable for Vue 3 -->
+<script src="//cdn.jsdelivr.net/npm/vuedraggable@4.1.0/dist/vuedraggable.umd.min.js"></script>
 
 (-((--HEAD_INCLUDES--))-)
 
-<script src="https://unpkg.com/v-tooltip@2.0.0"></script>
+<link rel="stylesheet" href="https://unpkg.com/floating-vue@5.2.2/dist/style.css">
+<script src="https://unpkg.com/floating-vue@5.2.2/dist/floating-vue.umd.js"></script>
 <?php
 
 global $MAP;
@@ -78,7 +83,15 @@ $_SESSION['urlAnterior'] = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUE
 
 
 <script>
-	Vue.use(VTooltip)
+	if (window.FloatingVue) {
+		Vue.use(FloatingVue);
+	} else if (window.FloatingVueDefault) {
+		Vue.use(window.FloatingVueDefault);
+	}
+
+	if (window.vuedraggable) {
+		Vue.component('draggable', window.vuedraggable.default || window.vuedraggable);
+	}
 
 
 
@@ -88,249 +101,79 @@ $_SESSION['urlAnterior'] = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUE
 	})
 	var ROOT = 'ROOT/';
 
-
 	$(function () {
-
-
-
-
-
-
 
 		$("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: '' });
 
-
-
-
-
 		$(".itens_menu_admin").on('click', function () {
-
 			if ($(this).hasClass('ativaHide') == true) {
-
 				if ($("#container_principal").css('display') == 'none') {
-
 					$("#container_principal").fadeIn(100, function () { setSizeWindow(); });
-
 				} else {
-
 					$("#container_principal").fadeOut(100, function () { setSizeWindow(); });
-
 				}
-
 			} else {
-
 				$("#container_principal").fadeOut(100, function () { setSizeWindow(); });
-
 			}
-
 		});
-
-
-
-
-
-
-
-
-
-
-
-
 
 		$(".tableList thead th").each(function () {
-
 			if ($(this).html() == "Código") {
-
 				$(this).css('width', 50);
-
 			}
-
-
-
 		});
-
-
-
-
 
 		$(".Datepicker").datepicker({
-
 			showOn: "button",
-
 			dateFormat: 'dd/mm/yy',
-
 			dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
-
 			dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-
 			dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-
 			monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-
 			monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-
 			nextText: 'Próximo',
-
 			prevText: 'Anterior',
-
 			numberOfMonths: 3,
-
 			buttonImage: "<?= ROOT ?>images/admin/calendar.gif",
-
 			buttonImageOnly: true
-
 		});
-
-
 
 		$(".mask_type_data").datepicker({
-
 			showOn: "button",
-
 			dateFormat: 'dd/mm/yy',
-
 			dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
-
 			dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-
 			dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-
 			monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-
 			monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-
 			nextText: 'Próximo',
-
 			prevText: 'Anterior',
-
 			numberOfMonths: 3,
-
 			buttonImage: "<?= ROOT ?>images/admin/calendar.gif",
-
 			buttonImageOnly: true
-
 		});
-
 		$('.mask_type_data').setMask('99/99/9999');
-
 		$('.mask_type_hora').setMask('99:99');
-
 		$('.mask_type_cep').setMask('99.999-999');
-
 		$('.mask_type_cpf').setMask('999.999.999-99');
-
 		$('.mask_type_rg').setMask('**.***.***-*');
-
 		$('.mask_type_cnpj').setMask('99.999.999/9999-99');
-
 		$('.mask_type_decimal').setMask('decimal');
 
-		//$('.mask_type_tel').setMask('(99)9999-9999');
-
-
-
 		$('.mask_type_tel').live('keyup', function () {
-
 			var valor = $(this).val();
-
 			valor = valor.replace('(', '').replace(/\)/gi, '').replace(/\-/gi, '');
-
 			if (valor.length > 11) {
-
 				$(this).unsetMask();
-
 				$(this).setMask('(99) 9-9999-9999');
-
 			} else {
-
 				$(this).unsetMask();
-
 				$(this).setMask('(99) 9999-99999');
-
 			}
-
-		})
-
-
-
-	});
-
-
-
-	var FUNCTION;
-
-
-
-	function conf(pergunta, fn) {
-
-		FUNCTION = fn;
-
-		if (pergunta != null) {
-
-
-
-			$("#quest_box").html(pergunta);
-
-			$("#confirm_box").show();
-
-
-
-		}
-
-		return false;
-
-	}
-
-	$(function () {
-
-		//
-
-
-
-		$(".confirm_confirmar").click(function () {
-
-			if (FUNCTION()) {
-
-				FUNCTION = '';
-
-			}
-
-
-
-			$("#confirm_box").hide();
-
-			$("#quest_box").html('');
-
-			return false;
-
-		});
-
-
-
-		$("#confirm_cancelar").click(function () {
-
-			$("#confirm_box").hide();
-
-			$("#quest_box").html('');
-
-			return false;
-
 		});
 
 	});
 
-	function wait() {
-
-		$("#waitLoad").show();
-
-	}
-	function loadShow() {
-		$("#waitLoad").show();
-
-	}
-	function loadHide() {
-		$("#waitLoad").hide();
-
-	}
+	/* conf/wait/loadShow/loadHide: definidos em admin/js/admin-ui.js */
 
 </script>

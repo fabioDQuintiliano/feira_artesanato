@@ -8,6 +8,9 @@
 4. Identifique se o arquivo é fonte ou gerado.
 5. Não execute a aplicação contra banco alternativo sem controlar a geração.
 6. Não exponha valores de credenciais encontrados no código.
+7. Classes novas do sistema principal vão em `classes/Sistema/` (`namespace Sistema;`). Use `classes/Backend/` só para operações da API REST.
+8. Funções avulsas vão em `functions/auto_*.php`. Arquivos com prefixo `auto_` nessa pasta entram no bootstrap automático (`__list_functions.php`).
+9. Widget de campo do CRUD admin → `componente/{slug}.php` (`Componente__{slug}`), via `mapear_componente`. Ver [admin-form-components.md](admin-form-components.md). Não usar `pages/cp_*` para isso.
 
 ## Como localizar uma funcionalidade
 
@@ -26,8 +29,9 @@
 1. Consulte a definição em `tables/`, sem editar.
 2. Identifique `system_form`, `system_inputs`, hooks e permissões.
 3. Localize a ação genérica em `action/`.
-4. Descubra o gerador responsável.
-5. Altere a fonte autoritativa e regenere de modo controlado.
+4. Se o campo usa widget, abra `componente/{mapear_componente}.php`.
+5. Descubra o gerador responsável.
+6. Altere a fonte autoritativa e regenere de modo controlado.
 
 ### Partindo de uma chamada da API
 
@@ -48,11 +52,12 @@ Trate como derivados:
 
 Fontes frequentes:
 
-- `system/` para geração;
+- `system/` para geração (ver [system-admin.md](system-admin.md));
 - metadados no MySQL;
 - `containers/` para layouts;
-- `functions/auto_*.php` para funções incluídas no índice;
-- `classes/`, `pages/` e `action/` para regras e fluxos.
+- `functions/auto_*.php` para helpers/funções avulsas carregadas automaticamente;
+- `classes/Sistema/` para classes de domínio novas e existentes do sistema principal;
+- `pages/` e `action/` para apresentação e endpoints HTTP.
 
 ## Escolha da camada de banco
 
@@ -65,7 +70,8 @@ O projeto possui três camadas. Não amplie o legado por conveniência.
 
 ## Compatibilidade
 
-- Frontend usa Vue 2 sem build; não escrever como Vue 3 ou módulos compilados.
+- Frontend usa Vue 3 (CDN) com ponte `script/vue3-bridge.js`; ainda se escreve Options API com `new Vue({ el })`, sem bundler/SFC.
+- Trechos de UI/comportamento reutilizáveis no fluxo principal devem ir em componentes `pages/cp_*.php` (ver `docs/pages-vue-objetos.md`), não copiados entre páginas.
 - O sistema depende de globais criadas pelo bootstrap.
 - Autoload próprio e Composer coexistem.
 - Dependências modernas exigem PHP recente, mas código legado pode depender de short tags e comportamentos antigos.

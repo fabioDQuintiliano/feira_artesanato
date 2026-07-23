@@ -13,15 +13,13 @@ Existe tensão de compatibilidade: dependências recentes exigem PHP moderno, en
 
 ## Configuração
 
-`config.php`:
+`config.php` + variáveis de ambiente (`.env` / Docker Compose):
 
-- inicia sessão;
-- define timezone;
-- escolhe produção ou desenvolvimento;
-- define `ROOT`, banco e integrações;
-- mantém o modo atual selecionado em código.
+- inicia sessão, timezone, `ROOT`, banco e integrações;
+- `APP_ENV` (`development` / `production`);
+- flags do painel: `SYSTEM_CODEGEN`, `SYSTEM_IDE_ENABLED`, `SYSTEM_AUX_BAR` (ver [system-admin.md](system-admin.md)).
 
-Não há `.env`. Segredos estão misturados à configuração e devem ser migrados para variáveis de ambiente ou cofre externo.
+Segredos devem ficar em variáveis de ambiente, não no código.
 
 ## Instalação
 
@@ -35,9 +33,9 @@ Procedimento mínimo inferido:
 6. garantir extensões PHP;
 7. conceder escrita apenas aos diretórios necessários;
 8. validar a raiz `/feira/` ou ajustar `ROOT`;
-9. acessar primeiro uma rota controlada e revisar geração de arquivos.
+9. em production (`APP_ENV=production`), codegen por request fica desligado; use `/system-rebuild` após mudanças de metadados.
 
-Não execute a aplicação contra um banco vazio ou incorreto sem desabilitar ou compreender a geração automática.
+Não execute a aplicação contra um banco vazio ou incorreto com `SYSTEM_CODEGEN=1` sem compreender a geração automática.
 
 ## Diretórios com escrita
 

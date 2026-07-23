@@ -33,12 +33,17 @@ else:?>
 
 
 		<div class="card-header pb-0">
-	    	<h6 class="mb-0">Edição de <?php echo $configTableList->nome;?></h6>
-	    	<small><?php echo $MAP['legenda'];?></small>
+	    	<div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+	    		<div>
+			    	<h6 class="mb-0">Edição de <?php echo htmlspecialchars($configTableList->nome, ENT_QUOTES, 'UTF-8');?></h6>
+			    	<small><?php echo htmlspecialchars((string)($MAP['legenda'] ?? ''), ENT_QUOTES, 'UTF-8');?></small>
+	    		</div>
+	    		<a href="ROOT/adm-home?item=<?php echo htmlspecialchars($ITEM, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-outline-secondary mb-0">
+	    			<i class="fas fa-arrow-left me-1"></i> Voltar
+	    		</a>
+	    	</div>
 	    </div>
-	    <div class="card-body px-0 pt-0 pb-2 mt-3 animated fadeIn">
-
-
+	    <div class="card-body pt-3 pb-3 animated fadeIn">
 	    	<?php loadFormNew($configTableList,$EDIT);?>
 	    </div>
 
@@ -53,10 +58,17 @@ else:?>
 		}
 	?>
 	    <div class="card-header pb-0">
-	    	<h6 class="mb-0">Cadastro de <?php echo $configTableList->nome;?></h6>
-	    	<small><?php echo $MAP['legenda'];?></small>
+	    	<div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+	    		<div>
+			    	<h6 class="mb-0">Cadastro de <?php echo htmlspecialchars($configTableList->nome, ENT_QUOTES, 'UTF-8');?></h6>
+			    	<small><?php echo htmlspecialchars((string)($MAP['legenda'] ?? ''), ENT_QUOTES, 'UTF-8');?></small>
+	    		</div>
+	    		<a href="ROOT/adm-home?item=<?php echo htmlspecialchars($ITEM, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-outline-secondary mb-0">
+	    			<i class="fas fa-arrow-left me-1"></i> Voltar
+	    		</a>
+	    	</div>
 	    </div>
-	    <div class="card-body px-0 pt-0 pb-2 mt-3">
+	    <div class="card-body pt-3 pb-3">
 	    	<?php loadFormNew($configTableList);?>
 	    </div>
 
@@ -83,10 +95,17 @@ else:?>
 	?>
 
 		<div class="card-header pb-0">
-	    	<h6 class="mb-0"><?php echo $configTableList->nome;?></h6>
-	    	<small><?php echo $MAP['legenda'];?></small>
+	    	<div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+	    		<div>
+			    	<h6 class="mb-0"><?php echo htmlspecialchars($configTableList->nome, ENT_QUOTES, 'UTF-8');?></h6>
+			    	<small><?php echo htmlspecialchars((string)($MAP['legenda'] ?? ''), ENT_QUOTES, 'UTF-8');?></small>
+	    		</div>
+	    		<a href="ROOT/adm-home?item=<?php echo htmlspecialchars($ITEM, ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-sm btn-outline-secondary mb-0">
+	    			<i class="fas fa-arrow-left me-1"></i> Voltar
+	    		</a>
+	    	</div>
 	    </div>
-	    <div class="card-body px-0 pt-0 pb-2 mt-3">
+	    <div class="card-body pt-3 pb-3">
 	    	<?php viewForm($configTableList,$_GET[':view']);?>
 	    </div>
 
@@ -114,51 +133,31 @@ else:?>
 
 	   
 		<div class="card-header pb-0">
-	    	<h6 class="mb-0">Listagem de <?php echo $configTableList->nome;?></h6>
-	    	<small><?php echo $MAP['legenda'];?></small>
+	    	<h6 class="mb-0">Listagem de <?php echo htmlspecialchars($configTableList->nome, ENT_QUOTES, 'UTF-8');?></h6>
+	    	<small><?php echo htmlspecialchars((string)($MAP['legenda'] ?? ''), ENT_QUOTES, 'UTF-8');?></small>
 
-
-
-		    <div class="row">
-
-		        <div class="col-6">
+		    <div class="adm-card-toolbar">
+		        <div class="d-flex flex-wrap align-items-center gap-2">
 		            <?php if($MAP['listar_pagina']==''):?>
 		                <?php 
-
 						if($configTableList->inserir != 1 && in_array(removeCaracteres($configTableList->nome),$PERFIL_PERMISSOES['add'])):?>
-
-			                <a href="ROOT/adm-home?item=<?php echo $ITEM?>&new=1">
-
-			                    <div class="bt_add"> 
-
-			                        Adicionar Registro
-
-			                    </div>
-
+			                <a href="ROOT/adm-home?item=<?php echo $ITEM?>&new=1" class="btn bg-gradient-info btn-sm mb-0">
+			                    <i class="fas fa-plus me-1"></i> Adicionar registro
 			                </a>
-
 		                <?php endif;?>
-
-		                <div class="iconBar">
+		                <div class="iconBar d-inline-flex align-items-center">
 		                    <?php if($configTableList->pdf == 1){ echo PDF($configTableList->nome);}?>
-		                </div><!-- iconBar -->
-
+		                </div>
+		                <div class="adm-filtro-slot">
+					        <?php 	
+							require_once 'admin/filtro.php';
+							?>
+						</div>
 		            <?php endif;?>
-
-		        </div><!-- left_row_admin -->
-
-		        <div class="col-6">
-
-			        <?php 	
-					if($MAP['listar_pagina']==''):
-						require_once 'admin/filtro.php';
-					endif;
-					?>
-				</div>
-		    </div><!-- row_admin -->
-
+		        </div>
+		    </div>
 	    </div>
-	    <div class="card-body px-0 pt-0 pb-2 mt-3">
+	    <div class="card-body pt-3 pb-3">
 	    	<?php listFormNew($configTableList,'id DESC',$_GET['pgini'],$QUERY_FILTRO);?>
 	    </div>
 	   

@@ -24,8 +24,9 @@
     </script>
 
     <script src="ROOT/script/jquery-migrate-1.0.0.js"></script>
-    <!-- Vue.js v2 -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <!-- Vue.js v3 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
+    <script src="<?php echo ROOT; ?>script/vue3-bridge.js"></script>
     <script src="ROOT/script/script_admin.js"></script>
     <script>
         tailwind.config = {

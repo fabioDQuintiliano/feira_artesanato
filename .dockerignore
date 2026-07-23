@@ -13,3 +13,17 @@ dump
 
 *.log
 docker-compose.override.yml
+
+# Soft UI: não embutir demos/build na imagem (runtime usa só assets/css + js pontuais)
+admin/template/soft-ui-dashboard-main/docs
+admin/template/soft-ui-dashboard-main/pages
+admin/template/soft-ui-dashboard-main/media
+admin/template/soft-ui-dashboard-main/assets/scss
+admin/template/soft-ui-dashboard-main/.github
+admin/template/soft-ui-dashboard-main/gulpfile.js
+admin/template/soft-ui-dashboard-main/package.json
+admin/template/soft-ui-dashboard-main/package-lock.json
+admin/template/soft-ui-dashboard-main/CHANGELOG.md
+admin/template/soft-ui-dashboard-main/README.md
+admin/template/soft-ui-dashboard-main/ISSUE_TEMPLATE.md
+admin/template/soft-ui-dashboard-main/LICENSE.md

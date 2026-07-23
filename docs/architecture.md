@@ -29,14 +29,20 @@ Uma página moderna costuma ter:
 
 - `<nome>.php`: markup e dados iniciais;
 - `<nome>.css.php`: estilos opcionais;
-- `<nome>.vue.php`: instância Vue 2 e comportamento no navegador.
+- `<nome>.vue.php`: instância Vue e comportamento no navegador.
 
 ### Aplicação e domínio
 
-- `classes/Sistema/`: regras de negócio usadas pela aplicação atual e por módulos legados.
-- `action/`: endpoints PHP incluídos diretamente pelo roteador.
-- `functions/`: funções globais, infraestrutura e camadas de banco.
-- `classes/Backend/`: implementação das operações expostas pela API.
+- `classes/Sistema/`: **local padrão para classes novas** de regra de negócio do sistema principal (namespace `Sistema\`).
+- `action/`: endpoints PHP incluídos diretamente pelo roteador (orquestram; a lógica deve ficar em `classes/Sistema/`).
+- `functions/`: infraestrutura e helpers. **Funções avulsas novas devem ficar em arquivos `functions/auto_*.php`**, que o sistema carrega automaticamente (via geração de `functions/__list_functions.php`). Não criar helpers soltos com outro prefixo esperando bootstrap automático.
+- `classes/Backend/`: apenas operações expostas pela API REST (`classes/Backend/<versao>/`). Não misturar aqui o domínio da aplicação web.
+
+**Diretrizes de organização**
+
+- Classe de domínio → `classes/Sistema/<Nome>.php` com `namespace Sistema;`.
+- Função avulsa / helper global → `functions/auto_<assunto>.php` (prefixo `auto_` obrigatório para carga automática).
+- Endpoint HTTP pontual → `action/` chamando classe em `Sistema\`.
 
 ### Persistência
 
@@ -50,7 +56,7 @@ Não há migrations formais nem uma unidade de trabalho central. Operações com
 
 ### Administração orientada por metadados
 
-As tabelas `system_form`, `system_inputs`, `system_perfil` e estruturas relacionadas descrevem formulários, campos, menus e permissões. Os geradores de `system/` transformam esses metadados em arquivos PHP.
+As tabelas `system_form`, `system_inputs`, `system_perfil` e estruturas relacionadas descrevem formulários, campos, menus e permissões. Os geradores de `system/` transformam esses metadados em arquivos PHP. Detalhes: [system-admin.md](system-admin.md).
 
 Arquivos derivados incluem:
 
@@ -113,7 +119,7 @@ rest.php
 
 ## Restrições arquiteturais importantes
 
-- Requisições normais podem acionar regeneração de código quando `system/` está presente.
+- Requisições normais regeneram código só com `SYSTEM_CODEGEN=1` (padrão em development). Em production use `/system-rebuild`.
 - A configuração de ambiente é definida em código, não por `.env`.
 - O autoload próprio e o Composer coexistem.
 - Código moderno exige PHP recente, enquanto partes legadas dependem de comportamentos antigos.

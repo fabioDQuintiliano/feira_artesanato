@@ -79,6 +79,34 @@ define('PHP_LOGIN_EXPIRES_MINS',60*24*365);
 define('MAILJET_API_KEY', getenv('MAILJET_API_KEY') ?: '');
 define('MAILJET_SECREDT', getenv('MAILJET_SECRET') ?: '');
 
+/*
+ --- Ambiente e flags do gerador do painel (system/).
+ --- Em production: codegen e IDE desligados por padrão; use system-rebuild ou SYSTEM_CODEGEN=1.
+*/
+if (!defined('APP_ENV')) {
+	define('APP_ENV', strtolower(trim((string) (getenv('APP_ENV') ?: 'production'))));
+}
+$__systemIsDev = in_array(APP_ENV, array('development', 'dev', 'local'), true);
+if (!function_exists('__env_flag')) {
+	function __env_flag($name, $default)
+	{
+		$v = getenv($name);
+		if ($v === false || $v === '') {
+			return (bool) $default;
+		}
+		return (bool) filter_var($v, FILTER_VALIDATE_BOOLEAN);
+	}
+}
+if (!defined('SYSTEM_CODEGEN')) {
+	define('SYSTEM_CODEGEN', __env_flag('SYSTEM_CODEGEN', $__systemIsDev));
+}
+if (!defined('SYSTEM_IDE_ENABLED')) {
+	define('SYSTEM_IDE_ENABLED', __env_flag('SYSTEM_IDE_ENABLED', $__systemIsDev));
+}
+if (!defined('SYSTEM_AUX_BAR')) {
+	define('SYSTEM_AUX_BAR', __env_flag('SYSTEM_AUX_BAR', $__systemIsDev));
+}
+unset($__systemIsDev);
 
 /*
 ---- define um arquivo de idiomas.

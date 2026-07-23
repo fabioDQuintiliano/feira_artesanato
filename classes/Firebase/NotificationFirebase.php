@@ -13,7 +13,7 @@ https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages/send
 
 */
 
-	public $api_key ="AAAAY_sI04M:APA91bFsELtR5MI5QP9plZNFfuNxaquPnr2--0ZUsNyaTlFTvTrbaPmz3fXBnz4GIbiXrSIWhxwo3v6-WG9AG75qqT5WUF27HFCE_CneDAHcjY0Y3HMzNPBxCHi_-IxdOsLucSh-hWRC";
+	public $api_key ="chave aqui";
 	public $project_id = "trico-be5b3";
 
 
