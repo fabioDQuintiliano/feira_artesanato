@@ -167,6 +167,10 @@
 		setWaiting(false);
 	};
 
+	window.addEventListener('pageshow', function () {
+		setWaiting(false);
+	});
+
 	$(function () {
 		ensureBootbox();
 

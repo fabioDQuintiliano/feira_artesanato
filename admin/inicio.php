@@ -23,8 +23,9 @@
 	      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
 	      <div class="navbar-brand m-0">
 			<a class="link-logo" href="ROOT/admin">
-	        	<img src="ROOT/images/logoAdmin.png" class="navbar-brand-img h-100" alt="<?= htmlspecialchars(PROJETO_NOME, ENT_QUOTES, 'UTF-8') ?>">
-	        	<span class="ms-1 font-weight-bold"><?=PROJETO_NOME?></span>
+	        	<span class="link-logo__frame">
+	        		<img src="ROOT/images/logoAdmin.png" class="navbar-brand-img" alt="Logo 2º Encontro de Ceramistas - Aprendizes e artesãos">
+	        	</span>
 			</a>
 	      </div>
 	    </div>

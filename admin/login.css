@@ -8,7 +8,7 @@
 	--login-line: #dbe3ee;
 	--login-surface: #ffffff;
 	--login-bg: #f4f7fb;
-	--login-brand: #0b4f6c;
+	--login-brand: #c45c32;
 	--login-accent: #0284c7;
 	--login-danger: #be123c;
 	--login-ok: #047857;
@@ -59,7 +59,7 @@ body.login-page {
 	content: '';
 	position: absolute;
 	inset: 0;
-	background: rgba(11, 79, 108, 0.82);
+	background: rgba(139, 58, 28, 0.55);
 }
 
 .login-brand-inner {
@@ -67,6 +67,31 @@ body.login-page {
 	z-index: 1;
 	max-width: 26rem;
 	animation: login-fade 0.45s ease both;
+}
+
+.login-logo-frame {
+	display: block;
+	max-width: 100%;
+	margin: 0 0 1.25rem;
+	line-height: 0;
+	overflow: hidden;
+	border-radius: 14px;
+	box-shadow: 0 12px 32px rgba(47, 18, 8, 0.28);
+}
+
+.login-logo-frame--card {
+	width: min(100%, 16rem);
+	margin: 0 auto 1rem;
+	box-shadow: none;
+}
+
+.login-brand-logo,
+.login-card-logo {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 14px;
+	clip-path: inset(0 round 14px);
 }
 
 .login-brand-kicker {
@@ -120,14 +145,6 @@ body.login-page {
 	padding-bottom: 1.15rem;
 	border-bottom: 1px solid var(--login-line);
 	text-align: center;
-}
-
-.login-card-logo {
-	display: block;
-	height: 48px;
-	width: auto;
-	margin: 0 auto 1rem;
-	object-fit: contain;
 }
 
 .login-card-head h2 {

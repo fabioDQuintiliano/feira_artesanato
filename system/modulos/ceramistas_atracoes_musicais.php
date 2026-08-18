@@ -1,0 +1,76 @@
+<?php
+/**
+ * Módulo admin: atrações musicais do 2º Encontro de Ceramistas.
+ * Instalar: docker compose exec -u www-data app php system/instalar_modulo.php ceramistas_atracoes_musicais
+ */
+return array(
+	'id' => 'ceramistas_atracoes_musicais',
+	'titulo' => 'Atrações musicais do encontro de ceramistas',
+	'doc' => 'docs/sql-ceramistas.md',
+	'schema_sql' => dirname(__DIR__, 2).'/sql/ceramistas_schema.sql',
+	'forms' => array(
+		array(
+			'arquivo_def' => 'atracoes_musicais',
+			'tabela' => 'atracoes_musicais',
+			'nome' => 'Atrações musicais',
+			'legenda' => 'Shows do encontro no Calçadão Pedro Furlan',
+			'menu' => 'Encontro',
+			'link' => 'atracoes_musicais',
+			'preinsert' => 'auto_preinsert_atracoes_musicais',
+			'preupdate' => 'auto_preupdate_atracoes_musicais',
+			'sql_ordem' => "echo 'dia ASC, hora ASC, ordem ASC';",
+			'campos' => array(
+				array('nome' => 'Nome', 'campo_tabela' => 'nome', 'type' => 'text', 'class' => ' gWidth', 'exb_listagem' => 1, 'exb_filtro' => 1, 'validacao' => 'text', 'secao' => 'Artista', 'ordem' => 1),
+				array('nome' => 'Slug (URL)', 'campo_tabela' => 'slug', 'type' => 'text', 'class' => ' gWidth', 'exb_listagem' => 1, 'secao' => 'Artista', 'ordem' => 2),
+				array('nome' => 'Resumo', 'campo_tabela' => 'resumo', 'type' => 'textarea', 'class' => ' ggWidth', 'secao' => 'Artista', 'ordem' => 3),
+				array(
+					'nome' => 'Cartaz',
+					'campo_tabela' => 'cartaz',
+					'type' => 'text',
+					'exb_listagem' => 1,
+					'mapear_componente' => 'upload_imagem_padrao',
+					'parametros_componente' => "w=1200\r\nh=1200\r\nview=200",
+					'secao' => 'Cartaz',
+					'ordem' => 4,
+				),
+				array('nome' => 'Texto alternativo do cartaz', 'campo_tabela' => 'cartaz_alt', 'type' => 'text', 'class' => ' ggWidth', 'secao' => 'Cartaz', 'ordem' => 5),
+				array(
+					'nome' => 'Dia',
+					'campo_tabela' => 'dia',
+					'type' => 'text',
+					'mascara' => 'data',
+					'exb_listagem' => 1,
+					'exb_filtro' => 1,
+					'validacao' => 'text',
+					'secao' => 'Show',
+					'ordem' => 6,
+				),
+				array(
+					'nome' => 'Horário',
+					'campo_tabela' => 'hora',
+					'type' => 'text',
+					'mascara' => 'hora',
+					'exb_listagem' => 1,
+					'validacao' => 'text',
+					'funcao_exibicao' => 'auto_exibe_hora',
+					'secao' => 'Show',
+					'ordem' => 7,
+				),
+				array('nome' => 'Local', 'campo_tabela' => 'local', 'type' => 'text', 'class' => ' gWidth', 'exb_listagem' => 1, 'secao' => 'Show', 'ordem' => 8),
+				array('nome' => 'Instagram', 'campo_tabela' => 'instagram', 'type' => 'text', 'class' => ' gWidth', 'secao' => 'Links', 'ordem' => 9),
+				array('nome' => 'Site', 'campo_tabela' => 'site', 'type' => 'text', 'class' => ' gWidth', 'secao' => 'Links', 'ordem' => 10),
+				array('nome' => 'Ordem', 'campo_tabela' => 'ordem', 'type' => 'text', 'exb_listagem' => 1, 'secao' => 'Publicação', 'ordem' => 11),
+				array(
+					'nome' => 'Ativo no site',
+					'campo_tabela' => 'ativo',
+					'type' => 'select',
+					'valor' => 'Não,Sim',
+					'exb_listagem' => 1,
+					'exb_filtro' => 1,
+					'secao' => 'Publicação',
+					'ordem' => 12,
+				),
+			),
+		),
+	),
+);

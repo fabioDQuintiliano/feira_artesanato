@@ -193,14 +193,17 @@ Links típicos: `ROOT/adm-home?item={form_id}`.
 
 ## Como criar / alterar um módulo admin
 
-1. Preferir a IDE `system-*` **ou** editar metadados no MySQL com cuidado.
-2. Definir tabela real + campos em `system_form` / `system_inputs`.
-3. Se precisar de lógica (senha, validação, side-effects): `functions/auto_<assunto>.php` + nome do hook no form.
-4. Se precisar de tela custom (não CRUD genérico): fonte em `admin/pages/<pagina>.php` (não em `exe_system/`).
-5. Recarregar qualquer URL do sistema (com `system/` presente) para regenerar, ou documentar um rebuild controlado.
-6. Testar listagem, cadastro, edição, exclusão, permissões e hooks.
+Fluxo preferido (idempotente, com definição em arquivo): [Como criar um módulo do painel admin](criar-modulo-admin.md).
 
-**Nunca** implementar mudança permanente só em `tables/` ou `admin/exe_system/` — será sobrescrita.
+Resumo:
+
+1. SQL da tabela em `docs/*.md` (e opcionalmente `sql/*.sql`).
+2. Definição em `system/modulos/{id}.php`.
+3. Hooks em `functions/auto_*.php` se houver regra além do CRUD.
+4. Instalar com `docker compose exec -u www-data app php system/instalar_modulo.php {id}`.
+5. Testar listagem, cadastro, edição, exclusão, permissões e botões relacionados.
+
+A IDE `system-*` continua válida para ajustes pontuais. **Nunca** implementar mudança permanente só em `tables/` ou `admin/exe_system/` — será sobrescrita.
 
 ---
 
@@ -252,8 +255,10 @@ Não tente modelá-las na IDE `system-*` sem alinhar o domínio. Módulos admin 
 1. **`css-admin-soft.css`** — overrides alinhados ao Soft UI sobre o legado.
 2. **CRUD** — botão Adicionar e submit no padrão Soft UI (`btn bg-gradient-info`).
 3. **Menu** — seções colapsáveis, ícones ampliados, sem `console.log`.
-4. **Deploy** — `.dockerignore` exclui docs/demos/scss/gulp do template Soft UI.
-5. **IDE** — restrita por flag em production; `system-rebuild` permanece disponível autenticado.
+4. **Marca** — `images/logoAdmin.png` no sidenav, no login (`loginSystem.php` / `head_login.php`) e no layout legado `container-admin.php`.
+5. **Início** — atalhos dos cadastros em `admin/pages/inicial.php` (fonte; `admin_body.php` prioriza essa pasta). Só aparecem itens com permissão de menu.
+6. **Deploy** — `.dockerignore` exclui docs/demos/scss/gulp do template Soft UI.
+7. **IDE** — restrita por flag em production; `system-rebuild` permanece disponível autenticado.
 
 ---
 
@@ -274,7 +279,7 @@ Ao trabalhar em um módulo do painel:
 
 | Tema | Onde |
 | --- | --- |
-| Entrada admin | `adm.php`, `admin/inicio.php` |
+| Entrada admin | `adm.php`, `admin/inicio.php`, `admin/pages/inicial.php` |
 | Conteúdo CRUD | `admin/admin_content.php`, `admin/admin_body.php` |
 | Menu | `admin/menu.php`, `classes/Sistema/Admin/Menu.php` |
 | Geradores | `system/gera_definicoes_de_tabelas.php`, `system/gera_arquivos_de_listagem.php` |

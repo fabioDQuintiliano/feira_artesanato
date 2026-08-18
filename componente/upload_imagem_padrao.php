@@ -4,12 +4,6 @@ class Componente__upload_imagem_padrao{
 
 	function listagem($tabela,$id,$valor=null){
 
-		// if(!empty($valor) && is_file('images/upload/'.$valor)):
-
-		// 	echo '<img src="'.ROOT.'images/upload/thumb_'.$valor.'" />';	
-
-		// endif;
-
 		if(!empty($valor)):
 
 			echo '<div style="text-align:left;"><img style="max-width:150px;" src="'.imageUrl($valor).'" /></div>';	
@@ -20,11 +14,7 @@ class Componente__upload_imagem_padrao{
 
 	function exibe($tabela,$valor=null,$PARAM=null){
 
-		
-
 		global $MAP;
-
-	
 
 		$paramh = trim($PARAM['h'])?trim($PARAM['h']):600;
 
@@ -34,9 +24,7 @@ class Componente__upload_imagem_padrao{
 
 		$campo = trim($PARAM['campo_tabela']);
 
-	
-
-		$mostraNomeArquivo = '';
+		$campoJs = htmlspecialchars((string) $campo, ENT_QUOTES, 'UTF-8');
 
 		if( $_GET[':edit'] != ''){
 
@@ -45,10 +33,6 @@ class Componente__upload_imagem_padrao{
 			$aux->id = $_GET[':edit'];
 
 			$aux->load();
-
-			
-
-			
 
 			if($aux->size()>0){
 
@@ -62,9 +46,23 @@ class Componente__upload_imagem_padrao{
 
 		}
 
-		
+		$previewAtual = '';
 
-		
+		if(!empty($valor)){
+
+			if(is_file('images/upload/thumb_'.$valor)){
+
+				$previewAtual = ROOT.'images/upload/thumb_'.$valor;
+
+			}elseif(function_exists('imageUrl')){
+
+				$previewAtual = imageUrl($valor);
+
+			}
+
+		}
+
+		$temPreview = $previewAtual !== '';
 
 		ob_start();
 
@@ -72,23 +70,381 @@ class Componente__upload_imagem_padrao{
 
 		<script>
 
-		if(typeof removeImageUpload != 'function'){
+		function removeImageUpload(campo){
 
-			function removeImageUpload(campo){
+			conf('Deseja remover esta imagem',function(){
 
-				conf('Deseja remover esta imagem',function(){
+				$(".input_"+campo).html('<input type="hidden" value="removerimagem" name="rm_'+campo+'" />');
 
-					$(".input_"+campo).html('<input type="hidden" value="removerimagem" name="rm_'+campo+'" />');
+				uploadImagemPadraoLimpar(campo);
 
-				})
+			})
+
+		}
+
+		function uploadImagemPadraoHint(campo, texto, erro){
+
+			var wrap = document.getElementById('wrap_upload_'+campo);
+
+			var status = document.getElementById('status_colar_'+campo);
+
+			if(wrap){
+
+				wrap.classList.toggle('is-error', !!erro);
+
+			}
+
+			if(status){
+
+				status.textContent = texto || '';
 
 			}
 
 		}
 
-		</script>
+		function uploadImagemPadraoMeta(campo, file){
 
-        
+			var meta = document.getElementById('meta_colar_'+campo);
+
+			if(!meta){
+
+				return;
+
+			}
+
+			if(!file){
+
+				meta.textContent = '';
+
+				return;
+
+			}
+
+			var kb = file.size / 1024;
+
+			var size = kb >= 1024 ? (kb / 1024).toFixed(1) + ' MB' : Math.max(1, Math.round(kb)) + ' KB';
+
+			meta.textContent = (file.name || 'imagem') + ' · ' + size;
+
+		}
+
+		function uploadImagemPadraoLimpar(campo){
+
+			var wrap = document.getElementById('wrap_upload_'+campo);
+
+			var prev = document.getElementById('preview_colar_'+campo);
+
+			var input = document.getElementById(campo);
+
+			if(prev){
+
+				if(prev.dataset.objectUrl){
+
+					URL.revokeObjectURL(prev.dataset.objectUrl);
+
+					delete prev.dataset.objectUrl;
+
+				}
+
+				prev.removeAttribute('src');
+
+			}
+
+			if(input){
+
+				try { input.value = ''; } catch (err) {}
+
+			}
+
+			if(wrap){
+
+				wrap.classList.remove('is-filled', 'is-drag', 'is-error');
+
+			}
+
+			uploadImagemPadraoMeta(campo, null);
+
+			uploadImagemPadraoHint(campo, '');
+
+		}
+
+		function uploadImagemPadraoArquivo(input, file){
+
+			if(!input || !file){
+
+				return false;
+
+			}
+
+			if(String(file.type).indexOf('image/') !== 0){
+
+				uploadImagemPadraoHint(input.id, 'Use uma imagem PNG, JPG ou WebP.', true);
+
+				return false;
+
+			}
+
+			var dt = new DataTransfer();
+
+			dt.items.add(file);
+
+			input.files = dt.files;
+
+			var wrap = document.getElementById('wrap_upload_'+input.id);
+
+			var prev = document.getElementById('preview_colar_'+input.id);
+
+			var rm = wrap ? wrap.querySelector('.input_'+input.id) : null;
+
+			if(rm){
+
+				rm.innerHTML = '';
+
+			}
+
+			if(prev){
+
+				if(prev.dataset.objectUrl){
+
+					URL.revokeObjectURL(prev.dataset.objectUrl);
+
+				}
+
+				prev.dataset.objectUrl = URL.createObjectURL(file);
+
+				prev.src = prev.dataset.objectUrl;
+
+			}
+
+			if(wrap){
+
+				wrap.classList.add('is-filled');
+
+				wrap.classList.remove('is-drag', 'is-error');
+
+			}
+
+			uploadImagemPadraoMeta(input.id, file);
+
+			uploadImagemPadraoHint(input.id, 'Pronta para salvar com o formulário.');
+
+			return true;
+
+		}
+
+		function uploadImagemPadraoDoClipboard(e, campo){
+
+			var clip = e.clipboardData || (e.originalEvent && e.originalEvent.clipboardData);
+
+			if(!clip || !clip.items){
+
+				return;
+
+			}
+
+			var input = document.getElementById(campo);
+
+			for(var i = 0; i < clip.items.length; i++){
+
+				if(clip.items[i].type.indexOf('image/') === 0){
+
+					e.preventDefault();
+
+					uploadImagemPadraoArquivo(input, clip.items[i].getAsFile());
+
+					return;
+
+				}
+
+			}
+
+		}
+
+		function uploadImagemPadraoColar(campo){
+
+			var zona = document.getElementById('colar_'+campo);
+
+			if(navigator.clipboard && navigator.clipboard.read){
+
+				navigator.clipboard.read().then(function(items){
+
+					var achou = false;
+
+					return Promise.all(items.map(function(item){
+
+						return Promise.all(item.types.map(function(type){
+
+							if(type.indexOf('image/') !== 0){
+
+								return null;
+
+							}
+
+							return item.getType(type).then(function(blob){
+
+								var ext = (type.split('/')[1] || 'png').replace('jpeg', 'jpg');
+
+								var file = new File([blob], 'colar.'+ext, {type: type});
+
+								achou = uploadImagemPadraoArquivo(document.getElementById(campo), file);
+
+							});
+
+						}));
+
+					})).then(function(){
+
+						if(!achou){
+
+							uploadImagemPadraoHint(campo, 'Nada para colar. Copie uma imagem e tente de novo.', true);
+
+							if(zona){ zona.focus(); }
+
+						}
+
+					});
+
+				}).catch(function(){
+
+					uploadImagemPadraoHint(campo, 'Clique na área e pressione Ctrl+V para colar.', true);
+
+					if(zona){ zona.focus(); }
+
+				});
+
+				return;
+
+			}
+
+			uploadImagemPadraoHint(campo, 'Clique na área e pressione Ctrl+V para colar.', true);
+
+			if(zona){ zona.focus(); }
+
+		}
+
+		function uploadImagemPadraoBind(campo){
+
+			var input = document.getElementById(campo);
+
+			var zona = document.getElementById('colar_'+campo);
+
+			if(!input || input.dataset.colarBound){
+
+				return;
+
+			}
+
+			input.dataset.colarBound = '1';
+
+			input.setAttribute('accept', 'image/*');
+
+			input.addEventListener('change', function(){
+
+				if(input.files && input.files[0]){
+
+					uploadImagemPadraoArquivo(input, input.files[0]);
+
+				}
+
+			});
+
+			input.addEventListener('paste', function(e){ uploadImagemPadraoDoClipboard(e, campo); });
+
+			if(!zona){
+
+				return;
+
+			}
+
+			var dragDepth = 0;
+
+			zona.addEventListener('paste', function(e){ uploadImagemPadraoDoClipboard(e, campo); });
+
+			zona.addEventListener('keydown', function(e){
+
+				if(e.key === 'Enter' || e.key === ' '){
+
+					e.preventDefault();
+
+					input.click();
+
+				}
+
+			});
+
+			zona.addEventListener('click', function(e){
+
+				if(e.target.closest('button, label, a')){
+
+					return;
+
+				}
+
+				var wrap = document.getElementById('wrap_upload_'+campo);
+
+				if(!wrap || !wrap.classList.contains('is-filled')){
+
+					input.click();
+
+				}
+
+			});
+
+			zona.addEventListener('dragenter', function(e){
+
+				e.preventDefault();
+
+				dragDepth++;
+
+				zona.classList.add('is-drag');
+
+			});
+
+			zona.addEventListener('dragover', function(e){
+
+				e.preventDefault();
+
+				zona.classList.add('is-drag');
+
+			});
+
+			zona.addEventListener('dragleave', function(e){
+
+				e.preventDefault();
+
+				dragDepth--;
+
+				if(dragDepth <= 0){
+
+					dragDepth = 0;
+
+					zona.classList.remove('is-drag');
+
+				}
+
+			});
+
+			zona.addEventListener('drop', function(e){
+
+				e.preventDefault();
+
+				dragDepth = 0;
+
+				zona.classList.remove('is-drag');
+
+				var files = e.dataTransfer && e.dataTransfer.files;
+
+				if(files && files[0]){
+
+					uploadImagemPadraoArquivo(input, files[0]);
+
+				}
+
+			});
+
+		}
+
+		</script>
 
         	<label><?php echo $PARAM['nome_campo']?></label>
 
@@ -100,34 +456,69 @@ class Componente__upload_imagem_padrao{
 
 	            <input type="hidden" name="param_<?php echo $campo?>[v]" value="<?php echo $paramview?>" />
 
-	            <input type="file" name="<?php echo $campo;?>" id="<?php echo $campo?>" />
+	            <div class="upload-imagem-padrao<?php echo $temPreview ? ' is-filled' : ''; ?>" id="wrap_upload_<?php echo $campoJs?>">
 
-	           	<div id="retImgCrop" style="margin-top:15px;" class="input_<?php echo trim($campo)?>">
+	            	<input class="upload-imagem-padrao__file" type="file" name="<?php echo $campo;?>" id="<?php echo $campoJs?>" accept="image/*" />
 
+	            	<div class="upload-imagem-padrao__zona" id="colar_<?php echo $campoJs?>" tabindex="0" role="button" aria-label="Área para enviar ou colar imagem">
 
+	            		<div class="upload-imagem-padrao__stage">
 
-				<?php
+	            			<img class="upload-imagem-padrao__preview" id="preview_colar_<?php echo $campoJs?>" alt="Pré-visualização"<?php echo $temPreview ? ' src="'.htmlspecialchars($previewAtual, ENT_QUOTES, 'UTF-8').'"' : ''; ?> />
 
-	            if(!empty($valor) && is_file('images/upload/thumb_'.$valor)){
+	            		</div>
 
-	            echo '<img src="'.ROOT.'images/upload/thumb_'.$valor.'" width="'.$paramciew.'"><br />';
+	            		<div class="upload-imagem-padrao__empty">
 
-	            echo '<div class="removeImageCrop" onclick="removeImageUpload(\''.trim($campo).'\')">Remover imagem</div>';	
+	            			<span class="upload-imagem-padrao__icon" aria-hidden="true">
 
-	            }?>
+	            				<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5.5-5.5L5 20"/><path d="M16 3v4M14 5h4"/></svg>
 
-	            
+	            			</span>
 
-	           
+	            			<strong>Arraste a imagem para cá</strong>
+
+	            			<span>PNG, JPG ou WebP · até o tamanho do formulário</span>
+
+	            			<div class="upload-imagem-padrao__chips">
+
+	            				<label class="upload-imagem-padrao__chip" for="<?php echo $campoJs?>">Escolher</label>
+
+	            				<button type="button" class="upload-imagem-padrao__chip" onclick="event.stopPropagation(); uploadImagemPadraoColar('<?php echo $campoJs?>')">Colar</button>
+
+	            			</div>
+
+	            		</div>
+
+	            		<div class="upload-imagem-padrao__overlay">
+
+	            			<label class="upload-imagem-padrao__chip upload-imagem-padrao__chip--solid" for="<?php echo $campoJs?>">Trocar</label>
+
+	            			<button type="button" class="upload-imagem-padrao__chip" onclick="uploadImagemPadraoColar('<?php echo $campoJs?>')">Colar</button>
+
+	            			<button type="button" class="upload-imagem-padrao__chip upload-imagem-padrao__chip--danger" onclick="removeImageUpload('<?php echo $campoJs?>')">Remover</button>
+
+	            		</div>
+
+	            		<div class="upload-imagem-padrao__drop">Solte para enviar</div>
+
+	            	</div>
+
+	            	<div class="upload-imagem-padrao__foot">
+
+	            		<p class="upload-imagem-padrao__meta" id="meta_colar_<?php echo $campoJs?>" data-saved="<?php echo $temPreview ? 'Imagem atual' : ''; ?>"><?php echo $temPreview ? 'Imagem atual' : ''; ?></p>
+
+	            		<p class="upload-imagem-padrao__status" id="status_colar_<?php echo $campoJs?>"></p>
+
+	            	</div>
+
+	            	<div class="input_<?php echo trim($campo)?>"></div>
+
+	            </div>
+
             </div>
 
-            
-
-            <style>
-
-			.removeImageCrop{ background:#16a085; color:#fff; border-radius:3px; float:left; clear:both; cursor:pointer; margin:5px 0px 0px 0px; padding:2px 2px 2px 2px;}
-
-			</style>
+            <script>uploadImagemPadraoBind('<?php echo $campoJs?>');</script>
 
 		<?php
 
@@ -137,13 +528,7 @@ class Componente__upload_imagem_padrao{
 
 	}
 
-	
-
 	function save($registro,$tabela,$campo){
-
-		
-
-		
 
 		$largItem =  $_POST['param_'.$campo]['w'];
 
@@ -151,26 +536,13 @@ class Componente__upload_imagem_padrao{
 
 		$viewItem =  $_POST['param_'.$campo]['v'];
 
-		
-
 		$aux = DB::read($tabela);
 
 		$aux->id = $registro;
 
 		$aux->load();
 
-
-
-
-
-
-
-
-
-
 		if($_FILES[$campo]['size']>0){
-
-			
 
 			$arquivo = $_FILES[$campo];
 
@@ -191,28 +563,18 @@ class Componente__upload_imagem_padrao{
 			$aux->update();
 
 		}
+
 		if($_FILES[$campo]['error'] == 1){
+
 			$_SESSION['resposta_no'] = "A imagem seleciona é muito grande e por isso foi ignorada.";
+
 		}
-		
-
-
-
-		
-
-		
-
-		
 
 		return true;
-
-		
 
 	}
 
 	function update($registro,$tabela,$campo){
-
-		
 
 		$largItem =  $_POST['param_'.$campo]['w'];
 
@@ -220,17 +582,11 @@ class Componente__upload_imagem_padrao{
 
 		$viewItem =  $_POST['param_'.$campo]['v'];
 
-		
-
 		$aux = DB::read($tabela);
 
 		$aux->id = $registro;
 
 		$aux->load();
-
-
-
-
 
 		if($_POST['rm_'.$campo] == 'removerimagem'){
 
@@ -247,15 +603,12 @@ class Componente__upload_imagem_padrao{
 			}
 
 			$nomeImagem = '';	
+
 			$aux->$campo = $nomeImagem;
 
 		}
-	
-		
-	//	var_dump($_FILES);
-		if($_FILES[$campo]['size']>0){
 
-			
+		if($_FILES[$campo]['size']>0){
 
 			$arquivo = $_FILES[$campo];
 
@@ -270,29 +623,20 @@ class Componente__upload_imagem_padrao{
 			resizeImage($arquivoOrigem,$largItem,$altuItem,'images/upload/'.$nomeImagem);
 
 			resizeImage($arquivoOrigem ,$viewItem,'','images/upload/thumb_'.$nomeImagem);
-			//resizeImage($arquivoOrigem ,$viewItem,'','images/upload/thumb_'.$nomeImagem);
 
 			$aux->$campo = $nomeImagem;
 
-
 		}
+
 		if($_FILES[$campo]['error'] == 1){
+
 			$_SESSION['resposta_no'] = "A imagem seleciona é muito grande e por isso foi ignorada.";
+
 		}
-		
 
-		
-
-		
 		$aux->update();
 
-		
-
-
-
 		return true;
-
-		
 
 	}
 
@@ -304,11 +648,6 @@ class Componente__upload_imagem_padrao{
 
 	}
 
-	
-
 }
 
 ?>
-
-
-

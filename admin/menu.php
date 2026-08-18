@@ -15,7 +15,9 @@
 		         		<i :class="[item.item.icon, 'fa-fw']"></i>
 		         	</span>
 		            <span class="nav-link-text nav-item-principal-text">{{item.item.nome}}</span>
-		            <i class="fas fa-chevron-down ms-auto menu-chevron" :class="{ 'is-open': isOpen(item.item.id) }"></i>
+		            <span class="menu-chevron" :class="{ 'is-open': isOpen(item.item.id) }" aria-hidden="true">
+		            	<i class="fas fa-chevron-down"></i>
+		            </span>
 		        </a>
 
 		        <ul class="navbar-nav menu-subitens" v-show="isOpen(item.item.id)">
@@ -87,10 +89,22 @@ var app = new Vue({
 	opacity: 0.8;
 }
 .menu-chevron{
-	font-size: 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 1rem;
+	width: 1rem;
+	height: 1rem;
+	margin-left: auto;
 	opacity: 0.55;
+	transform-origin: 50% 50%;
 	transition: transform 0.2s ease;
-	flex-shrink: 0;
+}
+.menu-chevron i{
+	font-size: 10px;
+	line-height: 1;
+	width: auto;
+	min-width: 0;
 }
 .menu-chevron.is-open{ transform: rotate(180deg); }
 </style>

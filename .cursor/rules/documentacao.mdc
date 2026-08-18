@@ -1,0 +1,14 @@
+---
+description: Toda implementação nova deve ser documentada em docs/
+alwaysApply: true
+---
+
+# Documentação obrigatória
+
+Qualquer implementação nova (módulo admin, tabela, endpoint, página, hook, integração, fluxo) deve ganhar ou atualizar um `.md` em `docs/`.
+
+- Inclua o arquivo no índice de `docs/README.md`.
+- SQL de schema/carga vai para um `.md` (ex.: `docs/sql-ceramistas.md`), não só na conversa.
+- Módulo de painel novo segue `docs/criar-modulo-admin.md` (`system/modulos/{id}.php` + `php system/instalar_modulo.php`).
+- Não copie credenciais, tokens ou chaves para documentação.
+- Não edite `tables/`, `admin/exe_system/` nem `functions/__list_functions.php` como fonte.

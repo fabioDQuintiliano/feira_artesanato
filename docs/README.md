@@ -13,6 +13,7 @@ Este diretório resume o funcionamento do sistema para agentes de IA e pessoas q
 - Não copiar credenciais, tokens ou chaves encontradas no código para documentação, logs, testes ou respostas.
 - Evitar executar a aplicação contra outro banco sem avaliar a geração automática de arquivos.
 - Confirmar o estado do repositório antes de alterar arquivos: parte do código atual pode não estar versionada.
+- **Toda implementação nova deve ser documentada em `docs/*.md`** e listada neste índice. Ver [documentacao.md](documentacao.md).
 
 ## Índice
 
@@ -31,6 +32,9 @@ Este diretório resume o funcionamento do sistema para agentes de IA e pessoas q
 - [Docker no WSL](docker-wsl.md)
 - [Pontos críticos de segurança](security-hotspots.md)
 - [Guia rápido para agentes de IA](ai-agent-guide.md)
+- [Documentação de implementações](documentacao.md)
+- [Como criar um módulo do painel admin](criar-modulo-admin.md)
+- [SQL do encontro de ceramistas](sql-ceramistas.md)
 
 ## Resumo do sistema
 

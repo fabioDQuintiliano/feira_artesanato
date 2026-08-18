@@ -24,6 +24,14 @@ class Menu {
 		'cronogramas' => 'fas fa-project-diagram',
 		'estabelecimentos' => 'fas fa-store',
 		'links' => 'fas fa-link',
+		'encontro' => 'fas fa-palette',
+		'expositores' => 'fas fa-store-alt',
+		'fotos_dos_expositores' => 'fas fa-images',
+		'programacao' => 'fas fa-calendar-alt',
+		'atracoesmusicais' => 'fas fa-music',
+		'atracoes_musicais' => 'fas fa-music',
+		'configuracao' => 'fas fa-sliders-h',
+		'encontroconfig' => 'fas fa-sliders-h',
 		'usuarios' => 'fas fa-user-shield',
 		'permissoes' => 'fas fa-key',
 		'menus' => 'fas fa-bars',
@@ -35,13 +43,27 @@ class Menu {
 		'estados' => 'fas fa-map',
 	];
 	public $iconsSubmenu = [];
+
+	private static $infoMenu = null;
 	
 	function getMenu(){
 		global $MAP,$PERFIL_PERMISSOES;
-		require_once('tables/_admin_menu.php');
 
-		uasort($INFO_MENU, array($this,'orderMenu'));
+		if (!is_array(self::$infoMenu)) {
+			$INFO_MENU = array();
+			if (is_file('tables/_admin_menu.php')) {
+				require 'tables/_admin_menu.php';
+			}
+			self::$infoMenu = is_array($INFO_MENU) ? $INFO_MENU : array();
+		}
+
+		$INFO_MENU = self::$infoMenu;
+		if ($INFO_MENU) {
+			uasort($INFO_MENU, array($this,'orderMenu'));
+		}
+
 		$mainManu = $INFO_MENU;
+		$menusPermitidos = (isset($PERFIL_PERMISSOES['menu']) && is_array($PERFIL_PERMISSOES['menu'])) ? $PERFIL_PERMISSOES['menu'] : array();
 
 		$objMenu = array();
 		foreach($mainManu as $k=>$itemMenu){
@@ -51,7 +73,7 @@ class Menu {
 
 				$MAP['infoPages'][$subMenu['link']]=$subMenu;
 
-				if(!in_array($subMenu['link'],$PERFIL_PERMISSOES['menu'])){continue;}
+				if(!in_array($subMenu['link'],$menusPermitidos)){continue;}
 
 				
 				$subMenu['id'] = removeCaracteres($j);

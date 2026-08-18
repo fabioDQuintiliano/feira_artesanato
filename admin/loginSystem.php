@@ -60,7 +60,9 @@ else:
 	}
 	?>
 	<header class="login-card-head">
-		<img src="<?php echo ROOT; ?>images/logoAdmin.png" alt="<?= htmlspecialchars(PROJETO_NOME, ENT_QUOTES, 'UTF-8') ?>" class="login-card-logo" />
+		<span class="login-logo-frame login-logo-frame--card">
+			<img src="<?php echo ROOT; ?>images/logoAdmin.png" alt="Logo 2º Encontro de Ceramistas - Aprendizes e artesãos" class="login-card-logo" />
+		</span>
 		<h2>Entrar</h2>
 		<p>Use suas credenciais de administrador.</p>
 	</header>

@@ -67,6 +67,8 @@ Ações centrais:
 
 Essas ações leem definições geradas e podem executar hooks. Uma mudança em um metadado pode afetar diversas telas e fluxos, não apenas uma entidade.
 
+Após excluir, `delete_global.php` responde com `Location` para o referer (mesmo host) ou para `adm-home?item={id}`. Não usar `history.go(-1)`: o overlay `#waitLoad` fica ativo na listagem e o bfcache do navegador restaura a tela com loading infinito. O overlay também é desligado em `pageshow` (`admin/js/admin-ui.js`).
+
 ## Autenticação e permissões
 
 O administrativo usa:

@@ -109,7 +109,7 @@ Ordem no insert/edit global: **pre\* → DB → componentes → pos\***.
 | Arquivo | Uso típico |
 | --- | --- |
 | `auto_jcrop.php` | Upload/crop de imagem |
-| `upload_imagem.php` / `_padrao` / `_garotas` | Upload de imagem |
+| `upload_imagem.php` / `_padrao` / `_garotas` | Upload de imagem. Em `_padrao`: dropzone (arrastar, clicar, colar), prévia centralizada e ações Trocar/Remover |
 | `upload_arquivo.php` | Upload de arquivo |
 | `galeria_de_imagens.php` | Galeria |
 | `editor_de_texto.php` | Rich text (Froala) |

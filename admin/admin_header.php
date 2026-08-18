@@ -45,7 +45,7 @@
 <link href="ROOT/admin/template/soft-ui-dashboard-main/assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet"
 	type="text/css" />
 <link href="ROOT/admin/css-admin.css" rel="stylesheet" type="text/css" />
-<link href="ROOT/admin/css-admin-soft.css" rel="stylesheet" type="text/css" />
+<link href="ROOT/admin/css-admin-soft.css?v=<?= (int) @filemtime(__DIR__ . '/css-admin-soft.css') ?>" rel="stylesheet" type="text/css" />
 <script src="ROOT/admin/js/admin-ui.js"></script>
 
 <link href="ROOT/css/jquery.ui.all.css" rel="stylesheet" type="text/css" />

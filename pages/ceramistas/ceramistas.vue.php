@@ -15,16 +15,24 @@
         el: '#app_ceramistas',
         data: function () {
             var dias = (data.programacao && data.programacao.dias) ? data.programacao.dias : [];
+            var frasesHero = (data.frasesHero && data.frasesHero.length)
+                ? data.frasesHero
+                : ['Arte que conecta, tradição que transforma!'];
             return {
                 scrolled: false,
                 menuAberto: false,
+                root: data.root || '',
                 whatsapp: data.whatsapp || '#',
                 expositores: data.expositores || [],
                 alimentacao: data.alimentacao || [],
+                atracoesMusicais: data.atracoesMusicais || [],
                 dias: dias,
                 diaAtivo: dias.length ? dias[0].dia_iso : null,
-                expositorAtivo: null,
-                fotoModalIndex: 0
+                frasesHero: frasesHero,
+                fraseHero: '',
+                fraseHeroPausa: false,
+                _typeIdx: 0,
+                _typeMode: 'pause'
             };
         },
         computed: {
@@ -32,12 +40,6 @@
                 var self = this;
                 var dia = this.dias.find(function (d) { return d.dia_iso === self.diaAtivo; });
                 return dia ? dia.itens : [];
-            },
-            fotoModal: function () {
-                if (!this.expositorAtivo) return '';
-                var fotos = this.expositorAtivo.fotos || [];
-                if (fotos[this.fotoModalIndex]) return fotos[this.fotoModalIndex].url;
-                return this.expositorAtivo.foto_destaque || this.expositorAtivo.logo || '';
             }
         },
         mounted: function () {
@@ -48,12 +50,12 @@
             window.addEventListener('scroll', this.onScroll, { passive: true });
             this.onScroll();
             this.initReveal();
-            document.addEventListener('keydown', this.onKey);
+            this.initTypewriter();
         },
         beforeDestroy: function () {
             window.removeEventListener('scroll', this.onScroll);
-            document.removeEventListener('keydown', this.onKey);
             if (this._observer) this._observer.disconnect();
+            if (this._typeTimer) clearTimeout(this._typeTimer);
         },
         methods: {
             fecharMenu: function () {
@@ -62,25 +64,52 @@
             iconeSvg: function (nome) {
                 return icones[nome] || icones.sun;
             },
-            abrirExpositor: function (exp) {
-                this.expositorAtivo = exp;
-                this.fotoModalIndex = 0;
-                document.body.style.overflow = 'hidden';
+            initTypewriter: function () {
+                var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (reduce || this.frasesHero.length < 2) {
+                    this.fraseHero = this.frasesHero[0];
+                    this.fraseHeroPausa = true;
+                    return;
+                }
+                this.fraseHero = '';
+                this._typeIdx = 0;
+                this._typeMode = 'typing';
+                this.tickTypewriter();
             },
-            fecharExpositor: function () {
-                this.expositorAtivo = null;
-                document.body.style.overflow = '';
-            },
-            onKey: function (e) {
-                if (e.key === 'Escape') this.fecharExpositor();
-            },
-            descricaoHtml: function (texto) {
-                if (!texto) return '';
-                var escaped = String(texto)
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;');
-                return '<p>' + escaped.replace(/\n\n+/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+            tickTypewriter: function () {
+                var self = this;
+                var frases = this.frasesHero;
+                var atual = frases[this._typeIdx] || '';
+                var delay = 36;
+
+                if (this._typeMode === 'typing') {
+                    this.fraseHeroPausa = false;
+                    if (this.fraseHero.length < atual.length) {
+                        this.fraseHero = atual.slice(0, this.fraseHero.length + 1);
+                        delay = 28 + Math.round(Math.random() * 18);
+                    } else {
+                        this._typeMode = 'pause';
+                        this.fraseHeroPausa = true;
+                        delay = 1100;
+                    }
+                } else if (this._typeMode === 'pause') {
+                    this._typeMode = 'deleting';
+                    this.fraseHeroPausa = false;
+                    delay = 160;
+                } else {
+                    if (this.fraseHero.length > 0) {
+                        this.fraseHero = this.fraseHero.slice(0, -1);
+                        delay = 16;
+                    } else {
+                        this._typeIdx = (this._typeIdx + 1) % frases.length;
+                        this._typeMode = 'typing';
+                        delay = 180;
+                    }
+                }
+
+                this._typeTimer = setTimeout(function () {
+                    self.tickTypewriter();
+                }, delay);
             },
             initReveal: function () {
                 var nodes = document.querySelectorAll('#app_ceramistas .reveal');

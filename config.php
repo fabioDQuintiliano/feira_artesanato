@@ -14,7 +14,7 @@ set_time_limit(0);
 */
 define('GLOBAL_CHARSET','UTF-8');
 
-define('PROJETO_NOME','Pulsa');
+define('PROJETO_NOME','Feira Artesanato');
 
 
 

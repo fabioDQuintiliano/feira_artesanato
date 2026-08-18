@@ -1,24 +1,36 @@
 <!--[CONTAINER-layout_ceramistas]-->
 <?php
 $MASTER_PAGETITLE = '2º Encontro de Ceramistas, Aprendizes e Artesãos · Arceburgo';
-$MASTER_DESCRIPTION = 'Arte que conecta, tradição que transforma! 5 e 6 de Setembro na Praça da Matriz, Arceburgo - MG. Programação, expositores, oficinas, música e espaço kids.';
 $MASTER_KEYWORDS = 'ceramistas, artesãos, Arceburgo, feira, cerâmica, encontro, artesanato';
 $MASTER_IMAGE = rtrim(ROOT, '/') . '/images/logo.png';
 
 $expositores = \Sistema\Expositores::listarArtesaos();
 $alimentacao = \Sistema\Expositores::listarAlimentacao();
 $programacao = \Sistema\Programacao::listarAgrupada();
-$waNumero = '5535997010196';
-$waUrl = 'https://wa.me/' . $waNumero . '?text=' . rawurlencode('Olá! Quero saber mais sobre o 2º Encontro de Ceramistas em Arceburgo.');
+try {
+    $atracoesMusicais = \Sistema\AtracoesMusicais::listar();
+} catch (\Throwable $e) {
+    $atracoesMusicais = [];
+}
+$config = \Sistema\CeramistasConfig::get();
+$MASTER_DESCRIPTION = $config['meta_description'];
+$waUrl = $config['whatsapp_url'];
 $img = rtrim(ROOT, '/') . '/images/ceramistas';
+$frasesHero = [
+    'Arte que conecta, tradição que transforma!',
+    'Tradição moldada em comunidade!',
+    'Arte que transforma, música que encanta!',
+];
 ?>
 <script>
 window.__CERAMISTAS__ = {
     root: <?= json_encode(ROOT) ?>,
     whatsapp: <?= json_encode($waUrl) ?>,
+    frasesHero: <?= json_encode($frasesHero, JSON_UNESCAPED_UNICODE) ?>,
     expositores: <?= json_encode($expositores, JSON_UNESCAPED_UNICODE) ?>,
     alimentacao: <?= json_encode($alimentacao, JSON_UNESCAPED_UNICODE) ?>,
-    programacao: <?= json_encode($programacao, JSON_UNESCAPED_UNICODE) ?>
+    programacao: <?= json_encode($programacao, JSON_UNESCAPED_UNICODE) ?>,
+    atracoesMusicais: <?= json_encode($atracoesMusicais, JSON_UNESCAPED_UNICODE) ?>
 };
 </script>
 
@@ -38,48 +50,50 @@ window.__CERAMISTAS__ = {
 
             <nav id="cer-nav" class="cer-nav" :class="{ 'is-open': menuAberto }">
                 <a href="#sobre" @click="fecharMenu">Sobre</a>
+                <a href="#musica" @click="fecharMenu">Música</a>
                 <a href="#programacao" @click="fecharMenu">Programação</a>
                 <a href="#expositores" @click="fecharMenu">Expositores</a>
                 <a href="#sabores" @click="fecharMenu">Sabores</a>
                 <a href="#atracoes" @click="fecharMenu">Atrações</a>
                 <a href="#kids" @click="fecharMenu">Espaço Kids</a>
                 <a href="#contato" @click="fecharMenu">Contato</a>
-                <a class="cer-btn cer-btn--compact" :href="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+                <a class="cer-btn cer-btn--compact" href="<?= htmlspecialchars($waUrl, ENT_QUOTES, 'UTF-8') ?>" :href="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
             </nav>
         </div>
     </header>
 
     <main id="conteudo">
         <section id="topo" class="cer-hero" aria-label="Destaque">
-            <div class="cer-hero__media" aria-hidden="true">
-                <img src="<?= $img ?>/hero-argila.jpg" alt="" width="1600" height="1067">
-                <div class="cer-hero__veil"></div>
+            <div class="cer-hero__ornament" aria-hidden="true">
+                <img class="cer-hero__corner cer-hero__corner--tr" src="<?= $img ?>/ornamentos/canto-topo.svg" alt="" width="420" height="420" decoding="async">
+                <img class="cer-hero__corner cer-hero__corner--bl" src="<?= $img ?>/ornamentos/canto-baixo.svg" alt="" width="420" height="420" decoding="async">
             </div>
-            <div class="cer-hero__content reveal is-visible">
-                <img class="cer-hero__logo" src="<?= ROOT ?>images/logo.png" alt="2º Encontro de Ceramistas, Aprendizes e Artesãos" width="720" height="232">
-                <h1>Arte que conecta, tradição que transforma!</h1>
-                <p class="cer-hero__lead">Venha viver momentos que transformam! O encontro está de volta em Arceburgo, MG.</p>
-                <div class="cer-hero__meta">
-                    <div class="cer-hero__when">
-                        <span class="cer-hero__meta-label">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v2M17 3v2M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-                            Quando
-                        </span>
-                        <strong>5 e 6 de Setembro</strong>
-                        <span class="cer-hero__meta-note">Sábado e domingo</span>
-                    </div>
-                    <div class="cer-hero__where">
-                        <span class="cer-hero__meta-label">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-                            Onde
-                        </span>
-                        <strong>Praça da Matriz</strong>
-                        <span class="cer-hero__meta-note">Calçadão Pedro Furlan · Arceburgo - MG</span>
+            <div class="cer-hero__stage">
+                <div class="cer-hero__brand">
+                    <img class="cer-hero__logo" src="<?= ROOT ?>images/logo.png" alt="2º Encontro de Ceramistas, Aprendizes e Artesãos" width="640" height="206">
+                    <h1>
+                        <span class="sr-only"><?= htmlspecialchars($frasesHero[0], ENT_QUOTES, 'UTF-8') ?></span>
+                        <span class="cer-hero__typewriter" aria-hidden="true">{{ fraseHero }}<span class="cer-hero__caret" :class="{ 'is-waiting': fraseHeroPausa }"></span></span>
+                    </h1>
+                    <p class="cer-hero__lead"><?= htmlspecialchars($config['lead'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <div class="cer-hero__actions">
+                        <a class="cer-btn" href="<?= htmlspecialchars($waUrl, ENT_QUOTES, 'UTF-8') ?>" :href="whatsapp" target="_blank" rel="noopener">Quero Fazer Parte</a>
+                        <a class="cer-hero__link" href="#musica">Música</a>
                     </div>
                 </div>
-                <div class="cer-hero__actions">
-                    <a class="cer-btn" :href="whatsapp" target="_blank" rel="noopener">Quero Fazer Parte</a>
-                    <a class="cer-btn cer-btn--ghost" href="#programacao">Ver programação</a>
+
+                <div class="cer-hero__type">
+                    <p class="cer-hero__label">Quando</p>
+                    <p class="cer-hero__days" aria-label="<?= htmlspecialchars($config['quando_aria'], ENT_QUOTES, 'UTF-8') ?>">
+                        <span><?= htmlspecialchars($config['dias_hero'], ENT_QUOTES, 'UTF-8') ?></span>
+                    </p>
+                    <p class="cer-hero__month"><?= htmlspecialchars($config['mes_ano'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <p class="cer-hero__label cer-hero__label--space">Onde</p>
+                    <p class="cer-hero__city"><?= htmlspecialchars($config['cidade'], ENT_QUOTES, 'UTF-8') ?> - <?= htmlspecialchars($config['uf'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <p class="cer-hero__place"><?= htmlspecialchars($config['local'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php if (!empty($config['local_complemento'])): ?>
+                    <p class="cer-hero__place-sub"><?= htmlspecialchars($config['local_complemento'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
@@ -93,8 +107,56 @@ window.__CERAMISTAS__ = {
                     <p>No entorno do Caramanchão da Praça da Matriz e no Calçadão Pedro Furlan, ceramistas, artesãos, famílias e visitantes compartilham dois dias de criação, música e sabores.</p>
                 </div>
                 <figure class="cer-sobre__figure">
-                    <img src="<?= $img ?>/sobre-atelier.jpg" alt="Vitrine artesanal com peças de cerâmica e artesanato" width="900" height="700" loading="lazy">
+                    <img src="<?= $img ?>/arceburgo.jpg" alt="Vitrine artesanal com peças de cerâmica e artesanato" width="900" height="700" loading="lazy">
                 </figure>
+            </div>
+        </section>
+
+        <section id="musica" class="cer-section cer-musica reveal">
+            <div class="cer-wrap">
+                <div class="cer-section__head">
+                    <p class="cer-eyebrow">Shows</p>
+                    <h2>Atrações musicais</h2>
+                    <p>Arte que transforma, música que encanta — dois shows gratuitos no Calçadão Pedro Furlan.</p>
+                    <p class="cer-musica__note"><?= htmlspecialchars($config['nota_musica'], ENT_QUOTES, 'UTF-8') ?></p>
+                </div>
+
+                <div class="cer-shows" v-if="atracoesMusicais.length">
+                    <article class="cer-show" v-for="show in atracoesMusicais" :key="show.id">
+                        <figure class="cer-show__poster" v-if="show.cartaz">
+                            <img
+                                :src="show.cartaz"
+                                :alt="show.cartaz_alt"
+                                width="902"
+                                height="899"
+                                loading="lazy"
+                            >
+                        </figure>
+                        <div class="cer-show__meta">
+                            <h3>{{ show.nome }}</h3>
+                            <p class="cer-show__when">{{ show.quando }}</p>
+                            <p v-if="show.resumo">{{ show.resumo }}</p>
+                            <div class="cer-show__actions" v-if="show.instagram_url || show.site">
+                                <a v-if="show.instagram_url" class="cer-btn cer-btn--compact" :href="show.instagram_url" target="_blank" rel="noopener">
+                                    <svg class="cer-show__action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                        <rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                                        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                                        <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/>
+                                    </svg>
+                                    Instagram
+                                </a>
+                                <a v-if="show.site" class="cer-btn cer-btn--compact cer-btn--ghost-show" :href="show.site" target="_blank" rel="noopener">
+                                    <svg class="cer-show__action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                        <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                                        <path d="M3.5 12h17M12 3.5c2.4 2.6 3.6 5.5 3.6 8.5s-1.2 5.9-3.6 8.5c-2.4-2.6-3.6-5.5-3.6-8.5s1.2-5.9 3.6-8.5z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                                    </svg>
+                                    Site
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <p class="cer-empty" v-else>Em breve as atrações musicais serão anunciadas.</p>
             </div>
         </section>
 
@@ -148,12 +210,11 @@ window.__CERAMISTAS__ = {
                 </div>
 
                 <div class="cer-expo-grid" v-if="expositores.length">
-                    <button
+                    <a
                         v-for="exp in expositores"
                         :key="exp.id"
-                        type="button"
                         class="cer-expo"
-                        @click="abrirExpositor(exp)"
+                        :href="root + 'expositor/' + exp.slug"
                     >
                         <span class="cer-expo__media">
                             <img :src="exp.foto_destaque || exp.logo" :alt="'Foto de ' + exp.nome" loading="lazy">
@@ -164,7 +225,7 @@ window.__CERAMISTAS__ = {
                             <span class="cer-expo__resumo">{{ exp.resumo }}</span>
                             <span class="cer-expo__cta">Ver perfil</span>
                         </span>
-                    </button>
+                    </a>
                 </div>
                 <p class="cer-empty" v-else>Em breve novos expositores serão anunciados.</p>
             </div>
@@ -185,12 +246,11 @@ window.__CERAMISTAS__ = {
                 </div>
 
                 <div class="cer-sabores-grid" v-if="alimentacao.length">
-                    <button
+                    <a
                         v-for="exp in alimentacao"
                         :key="'food-' + exp.id"
-                        type="button"
                         class="cer-sabor"
-                        @click="abrirExpositor(exp)"
+                        :href="root + 'expositor/' + exp.slug"
                     >
                         <span class="cer-sabor__media">
                             <img :src="exp.foto_destaque || exp.logo" :alt="'Foto de ' + exp.nome" loading="lazy">
@@ -204,7 +264,7 @@ window.__CERAMISTAS__ = {
                             <span class="cer-sabor__resumo">{{ exp.resumo }}</span>
                             <span class="cer-sabor__cta">Conhecer</span>
                         </span>
-                    </button>
+                    </a>
                 </div>
                 <p class="cer-empty" v-else>Em breve anunciamos os sabores do encontro.</p>
             </div>
@@ -218,60 +278,68 @@ window.__CERAMISTAS__ = {
                     <p>Pilares que fazem do encontro um fim de semana completo.</p>
                 </div>
 
-                <div class="cer-pillars">
-                    <article class="cer-pillar">
-                        <div class="cer-pillar__icon" v-html="iconeSvg('pottery')"></div>
-                        <h3>Artesanato de Cerâmica</h3>
-                        <p>Peças autorais únicas com história, cultura e identidade.</p>
-                        <img src="<?= $img ?>/atracoes-artesanato.jpg" alt="Artesanato regional" loading="lazy">
-                    </article>
-                    <article class="cer-pillar">
-                        <div class="cer-pillar__icon" v-html="iconeSvg('market')"></div>
-                        <h3>Artesanato de Arceburgo e Região</h3>
-                        <p>Valorização das raízes e dos talentos que nascem aqui.</p>
-                        <img src="<?= $img ?>/textura-argila.jpg" alt="Textura de argila e ofício" loading="lazy">
-                    </article>
-                    <article class="cer-pillar">
-                        <div class="cer-pillar__icon" v-html="iconeSvg('pottery')"></div>
-                        <h3>Oficina ao Vivo</h3>
-                        <p>Experiência criativa para todas as idades — participe, aprenda e encante-se!</p>
-                        <img src="<?= $img ?>/oficina-maos.jpg" alt="Mãos trabalhando em ofício artesanal" loading="lazy">
-                    </article>
-                    <article class="cer-pillar">
-                        <div class="cer-pillar__icon" v-html="iconeSvg('music')"></div>
-                        <h3>Música e Sabores</h3>
-                        <p>Rock vintage, o melhor da MPB, cerveja artesanal e delícias locais.</p>
-                        <img src="<?= $img ?>/sabores.jpg" alt="Ambiente de sabores e encontro" loading="lazy">
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="musica" class="cer-section cer-musica reveal">
-            <div class="cer-wrap cer-musica__grid">
-                <figure class="cer-musica__figure">
-                    <img src="<?= $img ?>/musica-ambiente.jpg" alt="Atmosfera acolhedora do encontro" loading="lazy">
-                </figure>
-                <div>
-                    <p class="cer-eyebrow">Trilha sonora</p>
-                    <h2>Boa música, boa conversa e muita arte</h2>
-                    <p>No 2º Encontro de Ceramistas, a trilha sonora também será especial. Vamos curtir um rock and roll vintage, daqueles clássicos leves, agradáveis e cheios de boas lembranças.</p>
-                    <p>Teremos também o melhor da Música Popular Brasileira: canções que acolhem, emocionam, aquecem o coração e celebram a riqueza da nossa cultura.</p>
-                </div>
+                <ul class="cer-pillars">
+                    <li class="cer-pillar">
+                        <span class="cer-pillar__icon" aria-hidden="true" v-html="iconeSvg('pottery')"></span>
+                        <div class="cer-pillar__copy">
+                            <h3>Artesanato de Cerâmica</h3>
+                            <p>Peças autorais únicas com história, cultura e identidade.</p>
+                        </div>
+                    </li>
+                    <li class="cer-pillar">
+                        <span class="cer-pillar__icon" aria-hidden="true" v-html="iconeSvg('market')"></span>
+                        <div class="cer-pillar__copy">
+                            <h3>Artesanato de Arceburgo e Região</h3>
+                            <p>Valorização das raízes e dos talentos que nascem aqui.</p>
+                        </div>
+                    </li>
+                    <li class="cer-pillar">
+                        <span class="cer-pillar__icon" aria-hidden="true" v-html="iconeSvg('pottery')"></span>
+                        <div class="cer-pillar__copy">
+                            <h3>Oficina ao Vivo</h3>
+                            <p>Experiência criativa para todas as idades — participe, aprenda e encante-se!</p>
+                        </div>
+                    </li>
+                    <li class="cer-pillar">
+                        <span class="cer-pillar__icon" aria-hidden="true" v-html="iconeSvg('music')"></span>
+                        <div class="cer-pillar__copy">
+                            <h3>Música e Sabores</h3>
+                            <p>Rock vintage, o melhor da MPB, cerveja artesanal e delícias locais.</p>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </section>
 
         <section id="kids" class="cer-section cer-kids reveal">
-            <div class="cer-wrap cer-kids__grid">
-                <div>
-                    <p class="cer-eyebrow">Famílias</p>
-                    <h2>Espaço Kids</h2>
-                    <p>Diversão garantida para os pequenos! Enquanto você aprecia a arte, o artesanato, a música e os sabores da nossa terra, as crianças terão um espaço especial cheio de alegria e segurança.</p>
-                    <p>Pula-pula com muita energia e brincadeiras incríveis preparadas com muito amor para a sua família.</p>
+            <div class="cer-wrap">
+                <div class="cer-kids__grid">
+                    <div class="cer-kids__copy">
+                        <p class="cer-eyebrow">Famílias</p>
+                        <h2>Espaço Kids</h2>
+                        <p>No sábado a criançada também coloca a criatividade para brincar. Enquanto os adultos passeiam pelo encontro, conhecem os artesãos, apreciam a cerâmica e curtem a programação, as crianças terão o próprio espaço — um cantinho de infância no meio da praça.</p>
+                    </div>
+                    <figure>
+                        <img src="<?= $img ?>/espaco-kids.jpg" alt="Crianças brincando no Espaço Kids do encontro" width="900" height="700" loading="lazy">
+                    </figure>
                 </div>
-                <figure>
-                    <img src="<?= $img ?>/espaco-kids.jpg" alt="Ambiente alegre para famílias" loading="lazy">
-                </figure>
+
+                <div class="cer-kids__days">
+                    <article class="cer-kids-day">
+                        <p class="cer-kids-day__when">Sábado · 5 de setembro</p>
+                        <h3>Oficina de massinhas e pintura</h3>
+                        <p class="cer-kids-day__meta">À tarde</p>
+                        <p>Oficina preparada com carinho por crianças, para crianças. Um momento gostoso de experimentar cores, formas, criar e se divertir com as mãos.</p>
+                    </article>
+                    <article class="cer-kids-day">
+                        <p class="cer-kids-day__when">Domingo · 6 de setembro</p>
+                        <h3>Brinquedos na praça</h3>
+                        <p class="cer-kids-day__meta">14h às 18h</p>
+                        <p>A diversão continua: brinquedos na praça, num cantinho especial para os pequenos brincarem e aproveitarem a tarde.</p>
+                    </article>
+                </div>
+
+                <p class="cer-kids__close">Porque o nosso encontro também é lugar de infância, criatividade e boas memórias.</p>
             </div>
         </section>
 
@@ -281,15 +349,15 @@ window.__CERAMISTAS__ = {
                     <p class="cer-eyebrow">Contato</p>
                     <h2>Venha fazer parte</h2>
                     <p>Dúvidas, inscrições ou interesse em expor? Fale conosco pelo WhatsApp.</p>
-                    <a class="cer-btn" :href="whatsapp" target="_blank" rel="noopener">(35) 99701-0196</a>
-                    <p class="cer-contato__place">Entorno do Caramanchão da Praça da Matriz e Calçadão Pedro Furlan · Arceburgo - MG</p>
+                    <a class="cer-btn" href="<?= htmlspecialchars($waUrl, ENT_QUOTES, 'UTF-8') ?>" :href="whatsapp" target="_blank" rel="noopener"><?= htmlspecialchars($config['whatsapp_rotulo'], ENT_QUOTES, 'UTF-8') ?></a>
+                    <p class="cer-contato__place"><?= htmlspecialchars($config['endereco'], ENT_QUOTES, 'UTF-8') ?></p>
                 </div>
                 <div class="cer-map">
                     <iframe
-                        title="Mapa da Praça da Matriz em Arceburgo"
+                        title="<?= htmlspecialchars($config['mapa_titulo'], ENT_QUOTES, 'UTF-8') ?>"
                         loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"
-                        src="https://maps.google.com/maps?q=Pra%C3%A7a%20da%20Matriz%2C%20Arceburgo%20-%20MG&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                        src="<?= htmlspecialchars($config['mapa_url'], ENT_QUOTES, 'UTF-8') ?>"
                     ></iframe>
                 </div>
             </div>
@@ -302,36 +370,8 @@ window.__CERAMISTAS__ = {
                 <img src="<?= ROOT ?>images/logo.png" alt="2º Encontro de Ceramistas" width="220" height="72">
                 <p>Arte que conecta, tradição que transforma!</p>
             </div>
-            <p>Arceburgo · 5 e 6 de Setembro</p>
+            <p><?= htmlspecialchars($config['rodape'], ENT_QUOTES, 'UTF-8') ?></p>
         </div>
     </footer>
 
-    <div class="cer-modal" v-if="expositorAtivo" @click.self="fecharExpositor">
-        <div class="cer-modal__dialog" role="dialog" aria-modal="true" :aria-labelledby="'expo-title-' + expositorAtivo.id">
-            <button class="cer-modal__close" type="button" @click="fecharExpositor" aria-label="Fechar">×</button>
-            <div class="cer-modal__hero">
-                <img :src="fotoModal" :alt="expositorAtivo.nome">
-            </div>
-            <div class="cer-modal__body">
-                <p class="cer-eyebrow">{{ expositorAtivo.categoria }}</p>
-                <h2 :id="'expo-title-' + expositorAtivo.id">{{ expositorAtivo.nome }}</h2>
-                <div class="cer-modal__desc" v-html="descricaoHtml(expositorAtivo.descricao)"></div>
-                <div class="cer-modal__gallery" v-if="expositorAtivo.fotos && expositorAtivo.fotos.length">
-                    <button
-                        v-for="(foto, i) in expositorAtivo.fotos"
-                        :key="foto.id"
-                        type="button"
-                        :class="{ 'is-active': fotoModalIndex === i }"
-                        @click="fotoModalIndex = i"
-                    >
-                        <img :src="foto.url" :alt="foto.legenda || expositorAtivo.nome" loading="lazy">
-                    </button>
-                </div>
-                <div class="cer-modal__links">
-                    <a v-if="expositorAtivo.instagram_url" :href="expositorAtivo.instagram_url" target="_blank" rel="noopener">Instagram</a>
-                    <a v-if="expositorAtivo.whatsapp_url" :href="expositorAtivo.whatsapp_url" target="_blank" rel="noopener">WhatsApp</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

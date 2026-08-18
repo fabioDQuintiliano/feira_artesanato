@@ -1,5 +1,35 @@
 <?php
 
+function admin_secao_abrir($nome)
+{
+	$id = 'secao-'.removeCaracteres($nome);
+	echo '<section class="linhaSeparaSessao" aria-labelledby="'.htmlspecialchars($id, ENT_QUOTES, 'UTF-8').'">';
+	echo '<header class="linhaSeparaSessao__head">';
+	echo '<h5 id="'.htmlspecialchars($id, ENT_QUOTES, 'UTF-8').'">'.htmlspecialchars($nome, ENT_QUOTES, 'UTF-8').'</h5>';
+	echo '</header>';
+	echo '<div class="linhaSeparaSessao__body">';
+}
+
+function admin_secao_fechar()
+{
+	echo '</div></section>';
+}
+
+function admin_secao_trocar(&$secaoAtual, $nomeSecao)
+{
+	$nomeSecao = trim((string) $nomeSecao);
+	if ($nomeSecao === $secaoAtual) {
+		return;
+	}
+	if ($secaoAtual !== '') {
+		admin_secao_fechar();
+	}
+	$secaoAtual = $nomeSecao;
+	if ($nomeSecao !== '') {
+		admin_secao_abrir($nomeSecao);
+	}
+}
+
 function loadFormNew($configTableList,$edit=null,$joinnn_item=null,$bt=''){
 
 	$q = new Model;
@@ -303,6 +333,8 @@ function loadFormNew($configTableList,$edit=null,$joinnn_item=null,$bt=''){
 
 	
 
+	$secaoAtual = '';
+
 	foreach($dados_inputs as $li):
 
 	
@@ -331,25 +363,13 @@ function loadFormNew($configTableList,$edit=null,$joinnn_item=null,$bt=''){
 
 	
 
-	
-
-		if($li['secao'] != ''):
-
-		
-
-			echo '<div class="linhaSeparaSessao"><h5>'.$li['secao'].'</h5></div>';
-
-		
-
-		endif;
-
-		
-
-		
-
-		
-
 	if(($li['exb_cadastro'] == 1 && empty($edit)) || ($li['exb_edicao'] == 1 && !empty($edit))):
+
+		$nomeSecao = trim((string) $li['secao']);
+
+		admin_secao_trocar($secaoAtual, $nomeSecao);
+
+
 
 		
 
@@ -996,11 +1016,10 @@ function loadFormNew($configTableList,$edit=null,$joinnn_item=null,$bt=''){
 
 	endforeach;
 
-	
-
-	
-
-	
+	if($secaoAtual !== ''){
+		admin_secao_fechar();
+		$secaoAtual = '';
+	}
 
 	?>
 
@@ -1886,6 +1905,8 @@ function viewForm($configTableList,$idReg){
 
 	
 
+	$secaoAtual = '';
+
 	foreach($dados_inputs as $li):
 
 		if(isset($dadosReg->{$li['campo_tabela']})){
@@ -1896,21 +1917,9 @@ function viewForm($configTableList,$idReg){
 
 			if($li['exb_view']==0)continue;
 
-		
+			$nomeSecao = trim((string) $li['secao']);
 
-	
-
-			if($li['secao'] != ''):
-
-			
-
-				echo '<div class="linhaSeparaSessao"><h5>'.$li['secao'].'</h5></div>';
-
-			
-
-			endif;
-
-		
+			admin_secao_trocar($secaoAtual, $nomeSecao);
 
 			ob_start();
 
@@ -2024,9 +2033,9 @@ function viewForm($configTableList,$idReg){
 
 	endforeach;
 
-
-
-	
+	if($secaoAtual !== ''){
+		admin_secao_fechar();
+	}
 
 }
 

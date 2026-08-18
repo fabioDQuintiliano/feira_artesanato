@@ -43,10 +43,15 @@
 					include ('pages/'.$pagina_solicitada.'/'.$pagina_solicitada.'.vue.php');
 				}
 			} else {
-				if (is_file('admin/exe_system/'.$pagina_solicitada.'.php') && $pagina_solicitada != 'home') {
+				$fonteAdmin = 'admin/pages/'.$pagina_solicitada.'.php';
+				if (is_file($fonteAdmin)) {
+					require $fonteAdmin;
+				} elseif (is_file('admin/exe_system/'.$pagina_solicitada.'.php') && $pagina_solicitada != 'home') {
 					require_once('admin/exe_system/'.$pagina_solicitada.'.php');
-				} else if ($ITEM != '') {
+				} elseif ($ITEM != '') {
 					require_once("admin_content.php");
+				} else {
+					require 'admin/pages/inicial.php';
 				}
 			}
 			?>

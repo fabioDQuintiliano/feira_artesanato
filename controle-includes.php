@@ -37,7 +37,15 @@ if(is_dir('system')):
 	// Em production, codegen fica desligado (SYSTEM_CODEGEN=0). Use /system-rebuild.
 	if(defined('SYSTEM_CODEGEN') && SYSTEM_CODEGEN):
 
-		system_run_codegen();
+		try {
+
+			system_run_codegen();
+
+		} catch (Throwable $e) {
+
+			error_log('SYSTEM_CODEGEN: '.$e->getMessage());
+
+		}
 
 	endif;
 

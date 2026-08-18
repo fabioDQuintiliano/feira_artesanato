@@ -26,6 +26,6 @@ done
 
 touch functions/__list_functions.php
 chown www-data:www-data functions/__list_functions.php 2>/dev/null || true
-chmod ug+rw functions/__list_functions.php 2>/dev/null || true
+chmod 666 functions/__list_functions.php 2>/dev/null || true
 
 exec "$@"

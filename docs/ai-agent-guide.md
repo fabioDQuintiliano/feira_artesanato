@@ -11,6 +11,8 @@
 7. Classes novas do sistema principal vão em `classes/Sistema/` (`namespace Sistema;`). Use `classes/Backend/` só para operações da API REST.
 8. Funções avulsas vão em `functions/auto_*.php`. Arquivos com prefixo `auto_` nessa pasta entram no bootstrap automático (`__list_functions.php`).
 9. Widget de campo do CRUD admin → `componente/{slug}.php` (`Componente__{slug}`), via `mapear_componente`. Ver [admin-form-components.md](admin-form-components.md). Não usar `pages/cp_*` para isso.
+10. Toda implementação nova ganha (ou atualiza) um `.md` em `docs/` e entra no índice de `docs/README.md`. Ver [documentacao.md](documentacao.md).
+11. Módulo novo do painel: definição em `system/modulos/{id}.php` e `docker compose exec -u www-data app php system/instalar_modulo.php {id}`. Ver [criar-modulo-admin.md](criar-modulo-admin.md). Não editar `tables/` como fonte.
 
 ## Como localizar uma funcionalidade
 
