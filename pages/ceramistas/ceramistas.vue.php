@@ -103,18 +103,22 @@
             },
             initReveal: function () {
                 var nodes = document.querySelectorAll('#app_ceramistas .reveal');
+                var show = function (el) { el.classList.add('is-visible'); };
                 if (!('IntersectionObserver' in window)) {
-                    nodes.forEach(function (el) { el.classList.add('is-visible'); });
+                    nodes.forEach(show);
                     return;
                 }
                 this._observer = new IntersectionObserver(function (entries) {
                     entries.forEach(function (entry) {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
+                        if (entry.isIntersecting || entry.intersectionRatio > 0) {
+                            show(entry.target);
+                            this._observer.unobserve(entry.target);
                         }
-                    });
-                }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
-                nodes.forEach(function (el) { this._observer.observe(el); }.bind(this));
+                    }.bind(this));
+                }.bind(this), { threshold: 0, rootMargin: '80px 0px 80px 0px' });
+                nodes.forEach(function (el) {
+                    this._observer.observe(el);
+                }.bind(this));
             }
         }
     });

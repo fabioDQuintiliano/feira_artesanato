@@ -768,10 +768,12 @@ h3 {
 .cer-expo__media {
     aspect-ratio: 1 / 1;
     width: 100%;
+    min-height: 10rem;
 }
 .cer-sabor__media {
     aspect-ratio: 1 / 1;
     width: 100%;
+    min-height: 10rem;
 }
 .cer-expo__media img,
 .cer-sabor__media > img {
@@ -959,6 +961,13 @@ h3 {
 .reveal.is-visible {
     opacity: 1;
     transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
 }
 
 @media (max-width: 960px) {
