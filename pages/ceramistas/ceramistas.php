@@ -1,8 +1,8 @@
 <!--[CONTAINER-layout_ceramistas]-->
 <?php
 $MASTER_PAGETITLE = '2º Encontro de Ceramistas, Aprendizes e Artesãos · Arceburgo';
-$MASTER_KEYWORDS = 'ceramistas, artesãos, Arceburgo, feira, cerâmica, encontro, artesanato';
-$MASTER_IMAGE = rtrim(ROOT, '/') . '/images/logo.png';
+$MASTER_KEYWORDS = 'ceramistas, artesãos, Arceburgo, feira de cerâmica, encontro de ceramistas, artesanato, oficinas, Minas Gerais, Praça da Matriz, Calçadão Pedro Furlan';
+$MASTER_IMAGE = rtrim(ROOT, '/') . '/images/ceramistas/arceburgo.jpg';
 
 $expositores = \Sistema\Expositores::listarArtesaos();
 $alimentacao = \Sistema\Expositores::listarAlimentacao();
@@ -14,6 +14,25 @@ try {
 }
 $config = \Sistema\CeramistasConfig::get();
 $MASTER_DESCRIPTION = $config['meta_description'];
+$MASTER_SEO = [
+    'title' => $MASTER_PAGETITLE,
+    'description' => $MASTER_DESCRIPTION,
+    'keywords' => $MASTER_KEYWORDS,
+    'image' => $MASTER_IMAGE,
+    'image_alt' => '2º Encontro de Ceramistas, Aprendizes e Artesãos em Arceburgo',
+    'type' => 'website',
+    'site_name' => '2º Encontro de Ceramistas, Aprendizes e Artesãos',
+    'canonical' => rtrim(ROOT, '/') . '/ceramistas',
+    'author' => '2º Encontro de Ceramistas, Aprendizes e Artesãos',
+    'theme_color' => '#D95D2B',
+    'favicon' => rtrim(ROOT, '/') . '/images/ceramistas/favicon.png',
+    'geo_placename' => $config['cidade'],
+    'geo_region' => 'BR-'.$config['uf'],
+    'geo_position' => (!empty($config['geo_lat']) && !empty($config['geo_lng']))
+        ? $config['geo_lat'].';'.$config['geo_lng']
+        : '',
+    'json_ld' => \Sistema\Seo::jsonLdEventoCeramistas($config, $MASTER_IMAGE, $atracoesMusicais),
+];
 $waUrl = $config['whatsapp_url'];
 $img = rtrim(ROOT, '/') . '/images/ceramistas';
 $frasesHero = [

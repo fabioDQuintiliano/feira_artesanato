@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" prefix="og: https://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="ROOT/images/ceramistas/favicon.png" type="image/png" sizes="195x195">
+    <link rel="apple-touch-icon" href="ROOT/images/ceramistas/favicon.png">
     (-((--HEAD_INCLUDES--))-)
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

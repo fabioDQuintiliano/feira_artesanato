@@ -97,3 +97,4 @@ Uploads são gravados dentro da árvore pública, principalmente em `images/uplo
 6. Testar com bibliotecas carregadas pelo container real.
 7. Testar com bibliotecas carregadas pelo container real.
 8. Preferir Options API compatível com a ponte Vue 3; evitar APIs removidas do Vue 2 (`filters`, `$on`/`$off` no root, `Vue.extend`).
+9. Título, descrição e imagem de compartilhamento: `$MASTER_SEO` (ver [SEO](seo.md)). Não montar `og:*` na mão no HTML da página.

@@ -118,50 +118,27 @@
 
 			
 
-		if($MASTER_PAGETITLE!=''):
+		if (!isset($head_include)) {
+			$head_include = '';
+		}
 
-			$head_include .= '<title>'.$MASTER_PAGETITLE.'</title>'."\r\n";
-			$head_include .= '<meta property="og:title" content="'.$MASTER_PAGETITLE.'" />'."\r\n";
-
-		else:
-
-			$head_include .= '<title>'.PROJETO_NOME.'</title>'."\r\n";
-			$head_include .= '<meta property="og:title" content="'.PROJETO_NOME.'" />'."\r\n";
-
-		endif;
-
-
-
-
-
-		if($MASTER_DESCRIPTION !=''):
-
-			$head_include .= '<meta name="description" content="'.$MASTER_DESCRIPTION.'">'."\r\n";
-			$head_include .= '<meta property="og:description" content="'.$MASTER_DESCRIPTION.'" />'."\r\n";
-
-		endif;
-
-		$head_include .= '<meta property="og:type" content="website" />'."\r\n";
-		$head_include .= '<meta property="og:url" content="'.$_SERVER['HTTP_HOST'].$_SERVER["REQUEST_URI"].'" />'."\r\n";
-
-		if($MASTER_KEYWORDS!=''):
-
-			$head_include .= '<meta name="keywords" content="'.$MASTER_KEYWORDS.'">'."\r\n";
-
-		endif;
-
-		if($MASTER_IMAGE!=''):
-
-			$head_include .= '<meta property="og:image" itemprop="image" content="'.$MASTER_IMAGE.'" />'."\r\n";
-
-		endif;
-
-
-		if($MASTER_ADD_TO_HEADER!=''):
-
-			$head_include .= $MASTER_ADD_TO_HEADER."\r\n";
-
-		endif;
+		$seo = (isset($MASTER_SEO) && is_array($MASTER_SEO)) ? $MASTER_SEO : array();
+		if (empty($seo['title'])) {
+			$seo['title'] = !empty($MASTER_PAGETITLE) ? $MASTER_PAGETITLE : PROJETO_NOME;
+		}
+		if (empty($seo['description']) && !empty($MASTER_DESCRIPTION)) {
+			$seo['description'] = $MASTER_DESCRIPTION;
+		}
+		if (empty($seo['keywords']) && !empty($MASTER_KEYWORDS)) {
+			$seo['keywords'] = $MASTER_KEYWORDS;
+		}
+		if (empty($seo['image']) && !empty($MASTER_IMAGE)) {
+			$seo['image'] = $MASTER_IMAGE;
+		}
+		if (!empty($MASTER_ADD_TO_HEADER)) {
+			$seo['extra'] = (isset($seo['extra']) ? $seo['extra'] : '').$MASTER_ADD_TO_HEADER;
+		}
+		$head_include .= \Sistema\Seo::head($seo);
 
 
 

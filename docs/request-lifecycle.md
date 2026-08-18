@@ -35,7 +35,7 @@ A página informa o container por um comentário no próprio arquivo:
 4. `<pagina>.vue.php`, quando existe;
 5. rodapé gerado do container.
 
-Ao final, `formataFullPageRet()` monta a resposta e substitui os marcadores internos.
+Ao final, `formataFullPageRet()` monta a resposta e substitui os marcadores internos. O placeholder `(-((--HEAD_INCLUDES--))-)` recebe título, Open Graph, Twitter Card e JSON-LD gerados por `\Sistema\Seo::head()` (ver [seo.md](seo.md)).
 
 ## Prefixos de rota
 

@@ -82,6 +82,7 @@ class CeramistasConfig
 
 		$quando = self::rotuloQuando($inicio, $fim, false);
 		$quandoCurto = self::rotuloQuando($inicio, $fim, true);
+		$coords = self::parseCoords($mapa);
 
 		return array_merge($fallback, [
 			'data_inicio' => date('Y-m-d', $inicio),
@@ -102,6 +103,8 @@ class CeramistasConfig
 			'endereco' => $endereco,
 			'mapa_url' => self::mapaUrl($mapa, $local),
 			'mapa_titulo' => 'Mapa de '.$local.' em '.$cidade,
+			'geo_lat' => $coords ? $coords['lat'] : null,
+			'geo_lng' => $coords ? $coords['lng'] : null,
 			'whatsapp' => $whatsapp,
 			'whatsapp_rotulo' => self::whatsappRotulo($whatsapp),
 			'whatsapp_url' => 'https://wa.me/'.$whatsapp.'?text='.rawurlencode($mensagem),

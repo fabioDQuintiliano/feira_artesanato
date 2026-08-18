@@ -9,7 +9,17 @@ if (!$expositor) {
 	http_response_code(404);
 	$MASTER_PAGETITLE = 'Expositor não encontrado · 2º Encontro de Ceramistas';
 	$MASTER_DESCRIPTION = 'Este expositor não foi encontrado ou não está mais disponível.';
-	$MASTER_IMAGE = rtrim(ROOT, '/') . '/images/logo.png';
+	$MASTER_IMAGE = rtrim(ROOT, '/') . '/images/ceramistas/arceburgo.jpg';
+	$MASTER_SEO = [
+		'title' => $MASTER_PAGETITLE,
+		'description' => $MASTER_DESCRIPTION,
+		'image' => $MASTER_IMAGE,
+		'image_alt' => '2º Encontro de Ceramistas, Aprendizes e Artesãos',
+		'site_name' => '2º Encontro de Ceramistas, Aprendizes e Artesãos',
+		'robots' => 'noindex, follow',
+		'theme_color' => '#D95D2B',
+		'favicon' => rtrim(ROOT, '/') . '/images/ceramistas/favicon.png',
+	];
 } else {
 	$voltarHash = ($expositor['grupo'] ?? '') === \Sistema\Expositores::GRUPO_ALIMENTACAO
 		? '#sabores'
@@ -18,7 +28,24 @@ if (!$expositor) {
 	$MASTER_DESCRIPTION = $expositor['resumo']
 		?: ('Conheça ' . $expositor['nome'] . ' no 2º Encontro de Ceramistas, Aprendizes e Artesãos.');
 	$MASTER_KEYWORDS = $expositor['nome'] . ', expositor, ceramistas, Arceburgo, ' . ($expositor['categoria'] ?: 'artesanato');
-	$MASTER_IMAGE = $expositor['foto_destaque'] ?: (rtrim(ROOT, '/') . '/images/logo.png');
+	$MASTER_IMAGE = $expositor['foto_destaque'] ?: (rtrim(ROOT, '/') . '/images/ceramistas/arceburgo.jpg');
+	$urlExpositor = rtrim(ROOT, '/') . '/expositor/' . $expositor['slug'];
+	$MASTER_SEO = [
+		'title' => $MASTER_PAGETITLE,
+		'description' => $MASTER_DESCRIPTION,
+		'keywords' => $MASTER_KEYWORDS,
+		'image' => $MASTER_IMAGE,
+		'image_alt' => $expositor['nome'] . ' no 2º Encontro de Ceramistas',
+		'type' => 'website',
+		'site_name' => '2º Encontro de Ceramistas, Aprendizes e Artesãos',
+		'canonical' => $urlExpositor,
+		'author' => $expositor['nome'],
+		'theme_color' => '#D95D2B',
+		'favicon' => rtrim(ROOT, '/') . '/images/ceramistas/favicon.png',
+		'geo_placename' => $config['cidade'],
+		'geo_region' => 'BR-'.$config['uf'],
+		'json_ld' => \Sistema\Seo::jsonLdExpositor($expositor, $urlExpositor),
+	];
 }
 
 ?>

@@ -35,6 +35,7 @@ Este diretório resume o funcionamento do sistema para agentes de IA e pessoas q
 - [Documentação de implementações](documentacao.md)
 - [Como criar um módulo do painel admin](criar-modulo-admin.md)
 - [SQL do encontro de ceramistas](sql-ceramistas.md)
+- [SEO e Open Graph (Facebook/WhatsApp)](seo.md)
 
 ## Resumo do sistema
 

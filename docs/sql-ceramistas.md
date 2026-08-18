@@ -504,6 +504,8 @@ Definição: `system/modulos/ceramistas_config.php`. Hooks: `functions/auto_cera
 
 O H1 do hero em `/ceramistas` alterna três frases com efeito de digitar/apagar (`pages/ceramistas/ceramistas.php` + `.vue.php`). A primeira permanece no `sr-only` para leitores de tela. As frases extras são: “Tradição moldada em comunidade!” e “Arte que transforma, música que encanta!”. Com `prefers-reduced-motion` fica só a primeira, sem animação.
 
+Meta tags (Google, Facebook, WhatsApp) e JSON-LD do evento/expositor: [seo.md](seo.md).
+
 Depois, logout/login no admin se o item não aparecer.
 
 ---
