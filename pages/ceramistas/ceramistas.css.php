@@ -300,11 +300,27 @@ h3 {
     margin: 0 0 0.85rem;
     font-size: clamp(2rem, 4vw, 3rem);
     max-width: 16ch;
-    min-height: 3.15em;
     color: #fff;
+    line-height: 1.2;
+}
+.cer-hero__typewriter-box {
+    display: grid;
+    align-items: start;
+}
+.cer-hero__typewriter-sizer,
+.cer-hero__typewriter {
+    grid-area: 1 / 1;
+}
+.cer-hero__typewriter-sizer {
+    visibility: hidden;
+    display: grid;
+    pointer-events: none;
+}
+.cer-hero__typewriter-sizer > span {
+    grid-area: 1 / 1;
 }
 .cer-hero__typewriter {
-    display: inline;
+    min-height: 0;
 }
 .cer-hero__caret {
     display: inline-block;
@@ -668,6 +684,54 @@ h3 {
     font-weight: 400;
 }
 
+.cer-agenda {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+}
+.cer-agenda__item {
+    margin: 0;
+    padding: 1.15rem 1.25rem;
+    background: var(--cer-paper);
+    border: 1px solid var(--cer-line);
+    border-radius: 0.35rem;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.9rem 1.1rem;
+    align-items: start;
+}
+.cer-agenda__icon {
+    width: 1.85rem;
+    height: 1.85rem;
+    color: var(--cer-clay);
+    margin-top: 0.12rem;
+}
+.cer-agenda__icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.cer-agenda__when {
+    margin: 0 0 0.45rem;
+    color: var(--cer-clay-deep);
+    font-size: 1.02rem;
+    line-height: 1.35;
+}
+.cer-agenda__item p:last-child {
+    margin: 0;
+    color: var(--cer-muted);
+    font-family: var(--cer-font-body);
+    font-size: 1rem;
+}
+.cer-agenda__close {
+    margin: 1.5rem 0 0;
+    max-width: 40rem;
+    font-family: var(--cer-font-body);
+    color: var(--cer-ink);
+}
+
 .cer-expo-grid,
 .cer-sabores-grid {
     display: grid;
@@ -863,6 +927,21 @@ h3 {
     border-radius: 0.25rem;
 }
 .cer-footer p { margin: 0; }
+.cer-footer p.cer-footer__credit {
+    display: block;
+    width: 100%;
+    margin: 1.25rem 0 0;
+    padding: 1.1rem 1.25rem 0;
+    border-top: 1px solid rgba(255, 247, 240, 0.2);
+    font-size: 0.82rem;
+    font-family: var(--cer-font-body);
+    color: rgba(255, 247, 240, 0.78);
+    text-align: center;
+}
+.cer-footer__credit a {
+    color: inherit;
+    text-decoration: none;
+}
 
 .cer-empty {
     padding: 1.5rem;

@@ -14,7 +14,6 @@
     new Vue({
         el: '#app_ceramistas',
         data: function () {
-            var dias = (data.programacao && data.programacao.dias) ? data.programacao.dias : [];
             var frasesHero = (data.frasesHero && data.frasesHero.length)
                 ? data.frasesHero
                 : ['Arte que conecta, tradição que transforma!'];
@@ -26,21 +25,12 @@
                 expositores: data.expositores || [],
                 alimentacao: data.alimentacao || [],
                 atracoesMusicais: data.atracoesMusicais || [],
-                dias: dias,
-                diaAtivo: dias.length ? dias[0].dia_iso : null,
                 frasesHero: frasesHero,
                 fraseHero: '',
                 fraseHeroPausa: false,
                 _typeIdx: 0,
                 _typeMode: 'pause'
             };
-        },
-        computed: {
-            itensDoDia: function () {
-                var self = this;
-                var dia = this.dias.find(function (d) { return d.dia_iso === self.diaAtivo; });
-                return dia ? dia.itens : [];
-            }
         },
         mounted: function () {
             var self = this;

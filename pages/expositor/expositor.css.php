@@ -292,6 +292,20 @@ h1 {
     margin-bottom: 0.5rem;
 }
 .cer-footer p { margin: 0; font-family: var(--cer-font-body); }
+.cer-footer p.cer-footer__credit {
+    display: block;
+    width: 100%;
+    margin: 1.25rem 0 0;
+    padding: 1.1rem 1.25rem 0;
+    border-top: 1px solid rgba(255, 247, 240, 0.2);
+    font-size: 0.82rem;
+    color: rgba(255, 247, 240, 0.78);
+    text-align: center;
+}
+.cer-footer__credit a {
+    color: inherit;
+    text-decoration: none;
+}
 
 @media (max-width: 960px) {
     .cer-profile__layout { grid-template-columns: 1fr; }

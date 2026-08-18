@@ -363,40 +363,58 @@ docker compose exec -u www-data app php system/instalar_modulo.php ceramistas_pr
 
 Definição: `system/modulos/ceramistas_programacao.php`. Hooks: `functions/auto_programacao.php`. Menu: **Encontro → Programação**.
 
-A seção **Espaço Kids** da página `/ceramistas` é texto estático em `pages/ceramistas/ceramistas.php`. A agenda deve repetir os mesmos blocos:
+A seção **Espaço Kids** da página `/ceramistas` é texto estático em `pages/ceramistas/ceramistas.php`. A **Programação** pública também é texto estático (mesma fonte do material oficial), sem abas por dia.
+
+Carga no admin (`programacao`) alinhada ao site:
 
 ```sql
-UPDATE `programacao`
-SET
-  `titulo` = 'Oficina de massinhas e pintura',
-  `descricao` = 'Oficina à tarde, preparada por crianças, para crianças: cores, formas e criar com as mãos.',
-  `hora_inicio` = '14:00:00',
-  `hora_fim` = NULL,
-  `local` = 'Espaço Kids'
-WHERE `id` = 5 AND `categoria` = 'kids';
+DELETE FROM `programacao`;
 
 INSERT INTO `programacao` (
   `txtid`, `titulo`, `descricao`, `dia`, `hora_inicio`, `hora_fim`,
   `local`, `categoria`, `icone`, `ordem`, `destaque`, `ativo`, `created_on`
-)
-SELECT
-  MD5('kids-brinquedos-2026-09-06'),
-  'Brinquedos na praça',
-  'Cantinho especial com brinquedos para os pequenos brincarem e aproveitarem a tarde.',
-  '2026-09-06',
-  '14:00:00',
-  '18:00:00',
-  'Espaço Kids',
-  'kids',
-  'kids',
-  4,
-  0,
-  1,
-  NOW()
-FROM DUAL
-WHERE NOT EXISTS (
-  SELECT 1 FROM `programacao`
-  WHERE `dia` = '2026-09-06' AND `categoria` = 'kids' AND `titulo` = 'Brinquedos na praça'
+) VALUES
+(
+  'prog-feira-sab',
+  'Expositores o dia todo',
+  'Durante todo o dia, nossos expositores estarão por lá apresentando seus trabalhos, suas criações e tudo aquilo que nasce do fazer artesanal.',
+  '2026-09-05', '09:00:00', '18:00:00',
+  'Praça da Matriz e Calçadão Pedro Furlan', 'feira', 'market', 1, 1, 1, NOW()
+),
+(
+  'prog-feira-dom',
+  'Expositores o dia todo',
+  'Durante todo o dia, nossos expositores estarão por lá apresentando seus trabalhos, suas criações e tudo aquilo que nasce do fazer artesanal.',
+  '2026-09-06', '09:00:00', '18:00:00',
+  'Praça da Matriz e Calçadão Pedro Furlan', 'feira', 'market', 1, 1, 1, NOW()
+),
+(
+  'prog-kids-oficina',
+  'Oficinas para as crianças',
+  'Oficinas para as crianças, com pintura e massinhas. Um espaço para os pequenos soltarem a imaginação, brincarem e criarem!',
+  '2026-09-05', '14:00:00', '18:00:00',
+  'Espaço Kids', 'kids', 'kids', 2, 0, 1, NOW()
+),
+(
+  'prog-rock-sab',
+  'Rock Vintage ao vivo',
+  'Música ao vivo com muito Rock Vintage para animar a tarde!',
+  '2026-09-05', '15:00:00', '18:00:00',
+  'Calçadão Pedro Furlan', 'musica', 'music', 3, 1, 1, NOW()
+),
+(
+  'prog-kids-brinquedos',
+  'Brinquedos para as crianças',
+  'Brinquedos para as crianças, garantindo diversão para os pequenos enquanto toda a família aproveita o encontro.',
+  '2026-09-06', '14:00:00', '18:00:00',
+  'Espaço Kids', 'kids', 'kids', 2, 0, 1, NOW()
+),
+(
+  'prog-mpb-dom',
+  'MPB ao vivo',
+  'A tarde ganha trilha sonora com MPB ao vivo, trazendo aquele clima gostoso para fechar nosso encontro.',
+  '2026-09-06', '15:00:00', '18:00:00',
+  'Calçadão Pedro Furlan', 'musica', 'music', 3, 1, 1, NOW()
 );
 ```
 

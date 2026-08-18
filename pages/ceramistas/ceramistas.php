@@ -6,7 +6,6 @@ $MASTER_IMAGE = rtrim(ROOT, '/') . '/images/ceramistas/arceburgo.jpg';
 
 $expositores = \Sistema\Expositores::listarArtesaos();
 $alimentacao = \Sistema\Expositores::listarAlimentacao();
-$programacao = \Sistema\Programacao::listarAgrupada();
 try {
     $atracoesMusicais = \Sistema\AtracoesMusicais::listar();
 } catch (\Throwable $e) {
@@ -48,7 +47,6 @@ window.__CERAMISTAS__ = {
     frasesHero: <?= json_encode($frasesHero, JSON_UNESCAPED_UNICODE) ?>,
     expositores: <?= json_encode($expositores, JSON_UNESCAPED_UNICODE) ?>,
     alimentacao: <?= json_encode($alimentacao, JSON_UNESCAPED_UNICODE) ?>,
-    programacao: <?= json_encode($programacao, JSON_UNESCAPED_UNICODE) ?>,
     atracoesMusicais: <?= json_encode($atracoesMusicais, JSON_UNESCAPED_UNICODE) ?>
 };
 </script>
@@ -92,12 +90,17 @@ window.__CERAMISTAS__ = {
                     <img class="cer-hero__logo" src="<?= ROOT ?>images/logo.png" alt="2º Encontro de Ceramistas, Aprendizes e Artesãos" width="640" height="206">
                     <h1>
                         <span class="sr-only"><?= htmlspecialchars($frasesHero[0], ENT_QUOTES, 'UTF-8') ?></span>
-                        <span class="cer-hero__typewriter" aria-hidden="true">{{ fraseHero }}<span class="cer-hero__caret" :class="{ 'is-waiting': fraseHeroPausa }"></span></span>
+                        <span class="cer-hero__typewriter-box" aria-hidden="true">
+                            <span class="cer-hero__typewriter-sizer">
+                                <span v-for="(frase, idx) in frasesHero" :key="'sizer-' + idx">{{ frase }}</span>
+                            </span>
+                            <span class="cer-hero__typewriter">{{ fraseHero }}<span class="cer-hero__caret" :class="{ 'is-waiting': fraseHeroPausa }"></span></span>
+                        </span>
                     </h1>
                     <p class="cer-hero__lead"><?= htmlspecialchars($config['lead'], ENT_QUOTES, 'UTF-8') ?></p>
                     <div class="cer-hero__actions">
                         <a class="cer-btn" href="<?= htmlspecialchars($waUrl, ENT_QUOTES, 'UTF-8') ?>" :href="whatsapp" target="_blank" rel="noopener">Quero Fazer Parte</a>
-                        <a class="cer-hero__link" href="#musica">Música</a>
+                        <a class="cer-hero__link" href="#programacao">Programação</a>
                     </div>
                 </div>
 
@@ -184,39 +187,47 @@ window.__CERAMISTAS__ = {
                 <div class="cer-section__head">
                     <p class="cer-eyebrow">Agenda</p>
                     <h2>Programação</h2>
-                    <p>Dois dias para aprender, apreciar e celebrar — oficinas, shows e a feira em ritmo de encontro.</p>
+                    <p>Para ninguém perder nada, confira os horários e programe-se para aproveitar cada momento!</p>
                 </div>
 
-                <div class="cer-tabs" role="tablist" aria-label="Dias do evento" v-if="dias.length">
-                    <button
-                        v-for="(dia, idx) in dias"
-                        :key="dia.dia_iso"
-                        type="button"
-                        role="tab"
-                        class="cer-tabs__btn"
-                        :class="{ 'is-active': diaAtivo === dia.dia_iso }"
-                        :aria-selected="diaAtivo === dia.dia_iso ? 'true' : 'false'"
-                        @click="diaAtivo = dia.dia_iso"
-                    >
-                        <strong>{{ dia.semana }}</strong>
-                        <span>{{ dia.rotulo }}</span>
-                    </button>
-                </div>
-
-                <ol class="cer-timeline" v-if="itensDoDia.length">
-                    <li v-for="item in itensDoDia" :key="item.id" class="cer-timeline__item" :class="{ 'is-destaque': item.destaque }">
-                        <div class="cer-timeline__time">
-                            <span class="cer-timeline__hour">{{ item.horario }}</span>
-                            <span class="cer-timeline__icon" v-html="iconeSvg(item.icone)"></span>
+                <ol class="cer-agenda">
+                    <li class="cer-agenda__item">
+                        <span class="cer-agenda__icon" aria-hidden="true" v-html="iconeSvg('market')"></span>
+                        <div>
+                            <p class="cer-agenda__when">Sábado e domingo · 9h às 18h</p>
+                            <p>Durante todo o dia, nossos expositores estarão por lá apresentando seus trabalhos, suas criações e tudo aquilo que nasce do fazer artesanal.</p>
                         </div>
-                        <div class="cer-timeline__body">
-                            <h3>{{ item.titulo }}</h3>
-                            <p>{{ item.descricao }}</p>
-                            <span class="cer-timeline__local" v-if="item.local">{{ item.local }}</span>
+                    </li>
+                    <li class="cer-agenda__item">
+                        <span class="cer-agenda__icon" aria-hidden="true" v-html="iconeSvg('kids')"></span>
+                        <div>
+                            <p class="cer-agenda__when">Sábado · 14h às 18h</p>
+                            <p>Oficinas para as crianças, com pintura e massinhas. Um espaço para os pequenos soltarem a imaginação, brincarem e criarem!</p>
+                        </div>
+                    </li>
+                    <li class="cer-agenda__item">
+                        <span class="cer-agenda__icon" aria-hidden="true" v-html="iconeSvg('music')"></span>
+                        <div>
+                            <p class="cer-agenda__when">Sábado · 15h às 18h</p>
+                            <p>Música ao vivo com muito Rock Vintage para animar a tarde!</p>
+                        </div>
+                    </li>
+                    <li class="cer-agenda__item">
+                        <span class="cer-agenda__icon" aria-hidden="true" v-html="iconeSvg('kids')"></span>
+                        <div>
+                            <p class="cer-agenda__when">Domingo · 14h às 18h</p>
+                            <p>Brinquedos para as crianças, garantindo diversão para os pequenos enquanto toda a família aproveita o encontro.</p>
+                        </div>
+                    </li>
+                    <li class="cer-agenda__item">
+                        <span class="cer-agenda__icon" aria-hidden="true" v-html="iconeSvg('music')"></span>
+                        <div>
+                            <p class="cer-agenda__when">Domingo · 15h às 18h</p>
+                            <p>A tarde ganha trilha sonora com MPB ao vivo, trazendo aquele clima gostoso para fechar nosso encontro.</p>
                         </div>
                     </li>
                 </ol>
-                <p class="cer-empty" v-else>A programação será publicada em breve.</p>
+                <p class="cer-agenda__close">Dois dias de arte, encontros, música, criatividade e muita coisa feita à mão e com afeto.</p>
             </div>
         </section>
 
@@ -346,15 +357,15 @@ window.__CERAMISTAS__ = {
                 <div class="cer-kids__days">
                     <article class="cer-kids-day">
                         <p class="cer-kids-day__when">Sábado · 5 de setembro</p>
-                        <h3>Oficina de massinhas e pintura</h3>
-                        <p class="cer-kids-day__meta">À tarde</p>
-                        <p>Oficina preparada com carinho por crianças, para crianças. Um momento gostoso de experimentar cores, formas, criar e se divertir com as mãos.</p>
+                        <h3>Oficinas de pintura e massinhas</h3>
+                        <p class="cer-kids-day__meta">14h às 18h</p>
+                        <p>Um espaço para os pequenos soltarem a imaginação, brincarem e criarem!</p>
                     </article>
                     <article class="cer-kids-day">
                         <p class="cer-kids-day__when">Domingo · 6 de setembro</p>
-                        <h3>Brinquedos na praça</h3>
+                        <h3>Brinquedos para as crianças</h3>
                         <p class="cer-kids-day__meta">14h às 18h</p>
-                        <p>A diversão continua: brinquedos na praça, num cantinho especial para os pequenos brincarem e aproveitarem a tarde.</p>
+                        <p>Diversão para os pequenos enquanto toda a família aproveita o encontro.</p>
                     </article>
                 </div>
 
@@ -391,6 +402,9 @@ window.__CERAMISTAS__ = {
             </div>
             <p><?= htmlspecialchars($config['rodape'], ENT_QUOTES, 'UTF-8') ?></p>
         </div>
+        <p class="cer-footer__credit">
+            Desenvolvido por: <a href="https://www.fdq.com.br" target="_blank" rel="noopener">Fabio Quintiliano</a>
+        </p>
     </footer>
 
 </div>

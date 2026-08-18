@@ -22,6 +22,14 @@ var BaseUrlAtualLoadingSetPast = window.location.protocol + "//" + window.locati
 		$(".backdropFullPage").show();
 	}
 	window.onbeforeunload = execAfterOk;
+	window.addEventListener('pageshow', function () {
+		$(".backdropFullPage").hide();
+		var waitLoad = document.getElementById('waitLoad');
+		if (waitLoad) {
+			waitLoad.classList.remove('is-active');
+			waitLoad.setAttribute('aria-hidden', 'true');
+		}
+	});
 //}
 $(document).click(function(event) {
    var elemento = event.target+"";

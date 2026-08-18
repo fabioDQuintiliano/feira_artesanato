@@ -139,6 +139,9 @@ window.__EXPOSITOR__ = <?= json_encode([
 			</div>
 			<p><?= htmlspecialchars($config['rodape'], ENT_QUOTES, 'UTF-8') ?></p>
 		</div>
+		<p class="cer-footer__credit">
+			Desenvolvido por: <a href="https://www.fdq.com.br" target="_blank" rel="noopener">Fabio Quintiliano</a>
+		</p>
 	</footer>
 </div>
 <?php endif; ?>
